@@ -1,0 +1,252 @@
+/* Projects Section */
+.projects-section {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    background-color: #f0f0f5;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+}
+
+/* Big Header Styling */
+/* Main Header - Static */
+.projects-main-header {
+    width: 90%;
+    max-width: 1600px;
+    margin: 0 auto;
+    /* Center it */
+    padding-top: 15vh;
+    padding-bottom: 5vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.big-project-title {
+    font-size: 13vw;
+    /* Decreased from 18vw */
+    line-height: 0.8;
+    font-weight: 500;
+    color: #111;
+    letter-spacing: -0.05em;
+    margin: 0;
+}
+
+.header-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    /* Clean up position relative to title */
+    margin-top: 2vw;
+}
+
+.total-count {
+    font-size: 4vw;
+    /* Responsive size */
+    font-weight: 300;
+    line-height: 1;
+    margin-bottom: 1rem;
+}
+
+.down-arrow {
+    font-size: 6vw;
+    /* Responsive size */
+    font-weight: 300;
+    line-height: 1;
+    transform: rotate(0deg);
+    /* Arrow pointing down as per standard unicode, or rotate if needed */
+}
+
+/* Container for Info + Room */
+/* Container for Info + Room */
+.projects-container {
+    display: flex;
+    width: 90%;
+    max-width: 1600px;
+    height: 80vh;
+    /* Adjust height */
+    margin-top: 5vh;
+    /* Shift content down */
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    align-items: flex-start;
+    position: relative;
+}
+
+/* Left Panel */
+/* Left Panel */
+.project-info-panel {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    text-align: left;
+    padding-right: 5%;
+}
+
+.info-slider-wrapper {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    /* Increased height for content */
+}
+
+/* Detail Styling */
+.project-details {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.project-title {
+    font-size: 4rem;
+    /* Match image size */
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    line-height: 1.1;
+    color: #000;
+}
+
+/* New Grid for Desc and Tech */
+.project-body-grid {
+    display: flex;
+    justify-content: space-between;
+    gap: 4rem;
+    width: 100%;
+}
+
+.desc-col {
+    flex: 2;
+}
+
+.tech-col {
+    flex: 1;
+    padding-top: 0.5rem;
+    /* Align with text */
+}
+
+.project-desc {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #444;
+    max-width: 100%;
+    margin: 0;
+}
+
+.tech-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 1rem;
+    letter-spacing: 0.05em;
+}
+
+.tech-stack {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    /* Vertical list */
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+}
+
+.tech-stack li {
+    font-size: 1rem;
+    font-weight: 400;
+    text-transform: none;
+    /* Normal case */
+    color: #222;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.project-btn-wrapper {
+    margin-top: 1rem;
+}
+
+.project-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 2rem;
+    background: #fff;
+    color: #111;
+    border: none;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.project-btn .dot {
+    width: 8px;
+    height: 8px;
+    background-color: #000;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.project-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Right Panel: Simple Image Frame */
+.project-visual-panel {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* or flex-start to align top */
+    position: relative;
+}
+
+.simple-image-frame {
+    width: 400px;
+    height: 500px;
+    /* 4:5 Aspect */
+    position: relative;
+    overflow: hidden;
+    /* Hide sliding images */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    background: #e0e0e5;
+    border-radius: 32px;
+    /* Round border */
+}
+
+.image-lift-container {
+    width: 100%;
+    /* height: auto; grows */
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.lift-image {
+    width: 100%;
+    height: 500px;
+    /* Match frame height */
+    flex-shrink: 0;
+    background-size: cover;
+    background-position: center;
+}
