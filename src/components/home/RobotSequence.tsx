@@ -30,17 +30,17 @@ const CALLOUT_DATA: CalloutData[] = [
     },
     {
         id: '2',
-        title: 'CAD/CAM Modeling',
-        description: 'PRECISION ENGINEERING AND TECHNICAL MODELING FOR MANUFACTURING, PROTOTYPING, AND COMPLEX ASSEMBLY.',
-        imageUrl: '/assets/media/cad.png',
+        title: 'AI & REINFORCED LEARNING',
+        description: 'DEVELOPING SCALABLE AI SOLUTIONS AND INTELLIGENT SYSTEMS WITH A FOCUS ON ROBUST ARCHITECTURE AND PERFORMANCE.',
+        imageUrl: '/assets/media/programming.png',
         x: 1000,
         y: 250,
     },
     {
         id: '3',
-        title: 'AI & REINFORCED LEARNING',
-        description: 'DEVELOPING SCALABLE AI SOLUTIONS AND INTELLIGENT SYSTEMS WITH A FOCUS ON ROBUST ARCHITECTURE AND PERFORMANCE.',
-        imageUrl: '/assets/media/programming.png',
+        title: 'CAD/CAM Modeling',
+        description: 'PRECISION ENGINEERING AND TECHNICAL MODELING FOR MANUFACTURING, PROTOTYPING, AND COMPLEX ASSEMBLY.',
+        imageUrl: '/assets/media/cad.png',
         x: 500,
         y: 650,
     },
@@ -244,16 +244,16 @@ export function RobotSequenceWithCallouts() {
         };
 
         // Create and animate all callouts
-        const callout1 = createCalloutElements(CALLOUT_DATA[0], -400, -300, '0%', 50, 30, 250, -150);
+        const callout1 = createCalloutElements(CALLOUT_DATA[0], -400, -300, '0%', 0, 0, 150, 0);
         animateCallout(callout1, 0, 0.25, -20);
 
-        const callout2 = createCalloutElements(CALLOUT_DATA[1], 0, -170, '0%', 0, 0, -150, 0);
-        animateCallout(callout2, 0.5, 0.75, 20);
+        const callout2 = createCalloutElements(CALLOUT_DATA[1], 100, -150, '0%', -100, 0, 0, 0);
+        animateCallout(callout2, 0.25, 0.5, 20);
 
-        const callout3 = createCalloutElements(CALLOUT_DATA[2], -450, -100, '-100%', 0, 0, 150, -300);
-        animateCallout(callout3, 0.25, 0.5, -20);
+        const callout3 = createCalloutElements(CALLOUT_DATA[2], -500, -100, '-100%', 0, -250, 100, 0);
+        animateCallout(callout3, 0.5, 0.75, -20);
 
-        const callout4 = createCalloutElements(CALLOUT_DATA[3], -200, -50, '-100%', 0, 0, -300, -300);
+        const callout4 = createCalloutElements(CALLOUT_DATA[3], 0, 50, '-100%', -100, -150, -150, -100);
         animateCallout(callout4, 0.75, 1, 20);
 
         return () => {

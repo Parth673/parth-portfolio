@@ -31,15 +31,12 @@ html {
 
 /* The sticky container that fills the viewport */
 .scroll-container {
-    height: 150vh;
     width: 100%;
     position: relative;
 }
 
 .genie-wrapper {
-    position: sticky;
-    top: 0;
-    /* width: 100vw; */
+    width: 100%;
     height: 100vh;
     pointer-events: none;
     overflow: hidden;
@@ -73,7 +70,7 @@ html {
     pointer-events: auto;
     width: 100%;
     height: 70%;
-    position: absolute;
+    position: sticky;
     top: 20%;
 }
 

@@ -1,6 +1,6 @@
-@import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+@import "tailwindcss";
 
 /* ============ CSS VARIABLES ============ */
 :root {
@@ -245,8 +245,8 @@ section {
   position: relative;
   width: 95%;
   max-width: 1600px;
-  height: 75vh;
-  margin: 2rem auto;
+  height: 65vh;
+  /* margin: 2rem auto; */
   background-color: #0d0d0d;
   border-radius: 2rem;
   overflow: hidden;
@@ -272,7 +272,7 @@ section {
 .scroll-indicator {
   display: flex;
   gap: 2rem;
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: 600;
   letter-spacing: 0.1em;
   opacity: 0.8;
@@ -280,9 +280,9 @@ section {
 
 /* ============ INTRO SECTION ============ */
 .intro {
-  padding: 2rem 5rem;
+  /* padding: 2rem 5rem; */
   align-items: flex-start;
-  margin: 0 0;
+  /* margin: 0 0; */
   min-height: auto;
 }
 
@@ -321,8 +321,16 @@ section {
 }
 
 /* ============ GENIE EFFECT ============ */
+.scroll-spacer {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+}
+
 .scroll-container {
-  height: 150vh;
+  height: 100vh;
   width: 100%;
   position: relative;
 }
@@ -355,12 +363,13 @@ section {
   pointer-events: auto;
   color: var(--text-color);
   will-change: transform, opacity;
+  opacity: 1;
 }
 
 .genie-container {
   pointer-events: auto;
   width: 90%;
-  max-width: 1200px;
+  max-width: 1600px;
   height: 70%;
   position: absolute;
   top: 15%;
@@ -869,4 +878,78 @@ section {
   height: 100%;
   background-size: cover;
   background-position: center;
+}
+
+/* ============ EXPLORE WORK BUTTON ============ */
+.explore-work-btn {
+  height: 60px;
+  width: 240px;
+  position: relative;
+  background-color: #ffffff;
+  opacity: 1;
+  cursor: pointer;
+  border: none;
+  overflow: hidden;
+  border-radius: 30px;
+  color: #333;
+  transition: all 0.5s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  z-index: 10;
+}
+
+.explore-work-btn .btn-txt {
+  z-index: 2;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  transition: color 0.5s ease-in-out;
+  margin-left: 1rem;
+}
+
+.explore-work-btn .btn-dot {
+  width: 10px;
+  height: 10px;
+  background-color: #333;
+  border-radius: 50%;
+  z-index: 2;
+  transition: all 0.5s ease-in-out;
+}
+
+.explore-work-btn::after {
+  content: "";
+  position: absolute;
+  left: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: all 0.6s ease-in-out;
+  background-color: #f45520;
+  border-radius: 50%;
+  visibility: hidden;
+  height: 10px;
+  width: 10px;
+  z-index: 1;
+}
+
+.explore-work-btn:hover {
+  box-shadow: 0 20px 40px rgba(255, 167, 51, 0.3);
+  color: #fff;
+}
+
+.explore-work-btn:hover .btn-txt {
+  color: #fff;
+}
+
+.explore-work-btn:hover .btn-dot {
+  background-color: #fff;
+  transform: scale(1.5);
+}
+
+.explore-work-btn:hover::after {
+  visibility: visible;
+  transform: scale(60) translate(0, -1%);
 }

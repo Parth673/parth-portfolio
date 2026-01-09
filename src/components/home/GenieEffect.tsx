@@ -185,9 +185,10 @@ export function GenieEffect() {
 
         // Show/hide play button based on progress
         ScrollTrigger.create({
-            trigger: '#scroll-section',
-            start: 'top 50%',
-            end: 'bottom 80%',
+            trigger: '.scroll-section',
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: 1,
             onUpdate: () => {
                 if (uiLayer) {
                     uiLayer.style.opacity = state.progress >= 0.95 ? '1' : '0';
@@ -254,9 +255,9 @@ export function GenieEffect() {
                             Specializing in CAD/CAM modeling and 3D animation, I develop accurate designs and
                             simulations that support manufacturing, prototyping, and technical communication.
                         </p>
-                        <button className="group flex items-center gap-4 px-10 py-4 bg-white rounded-full shadow-xl hover:shadow-2xl transition-all duration-500">
-                            <span className="w-2.5 h-2.5 bg-blue-600 rounded-full group-hover:scale-150 transition-transform"></span>
-                            <span className="font-bold text-sm tracking-widest uppercase">Explore Work</span>
+                        <button className="explore-work-btn group">
+                            <span className="btn-dot"></span>
+                            <span className="btn-txt">Explore Work</span>
                         </button>
                     </div>
                 </div>
