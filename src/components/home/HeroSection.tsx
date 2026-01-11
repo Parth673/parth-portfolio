@@ -1,120 +1,83 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, Suspense } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Environment, Float, PerspectiveCamera, ContactShadows } from '@react-three/drei';
 import * as THREE from 'three';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+// @ts-ignore
+import { Model as RobotModel } from './robot';
 
-gsap.registerPlugin(ScrollTrigger);
+// ADJUSTABLE CONSTANTS
+const ROBOT_CONFIG = {
+    initialY: 1,           // Starting vertical position
+    scrollUpDistance: 10,   // How much it moves UP on scroll
+    rotationSpeedY: Math.PI * 2, // 360 degrees spin
+    cameraDistance: 20,     // Distance from camera
+    mouseSensitivity: 0.3,   // How much it follows mouse
+};
+
+const WORDS = ["CREATIVE", "INTELLIGENT", "SECURE"];
+
+function RobotScene() {
+    const scrollGroupRef = useRef<THREE.Group>(null);
+    const mouseGroupRef = useRef<THREE.Group>(null);
+    const { mouse } = useThree();
+
+    useFrame(() => {
+        if (!scrollGroupRef.current || !mouseGroupRef.current) return;
+
+        // --- SCROLL LOGIC ---
+        const scrollY = window.scrollY;
+        const scrollHeight = window.innerHeight;
+        const progress = Math.min(scrollY / scrollHeight, 1);
+
+        scrollGroupRef.current.position.y = ROBOT_CONFIG.initialY + (progress * ROBOT_CONFIG.scrollUpDistance);
+        scrollGroupRef.current.rotation.y = (progress * ROBOT_CONFIG.rotationSpeedY) - Math.PI / 6;
+
+        // --- MOUSE FOLLOW LOGIC ---
+        const targetRotationX = -mouse.y * ROBOT_CONFIG.mouseSensitivity;
+        const targetRotationY = mouse.x * ROBOT_CONFIG.mouseSensitivity;
+
+        mouseGroupRef.current.rotation.x = THREE.MathUtils.lerp(
+            mouseGroupRef.current.rotation.x,
+            targetRotationX,
+            0.1
+        );
+        mouseGroupRef.current.rotation.y = THREE.MathUtils.lerp(
+            mouseGroupRef.current.rotation.y,
+            targetRotationY,
+            0.1
+        );
+    });
+
+    return (
+        <Suspense fallback={null}>
+            <PerspectiveCamera makeDefault position={[0, 0, ROBOT_CONFIG.cameraDistance]} fov={35} />
+            <ambientLight intensity={1.5} />
+            <spotLight position={[10, 10, 10]} angle={0.45} penumbra={1} intensity={2} />
+            <pointLight position={[-10, -10, -5]} intensity={1} color="#3355ff" />
+
+            <group ref={scrollGroupRef} position={[0, ROBOT_CONFIG.initialY, 0]}>
+                <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.5}>
+                    <group ref={mouseGroupRef} scale={0.005}>
+                        <RobotModel />
+                    </group>
+                </Float>
+            </group>
+
+            <ContactShadows
+                position={[0, -4.5, 0]}
+                opacity={0.4}
+                scale={20}
+                blur={2.5}
+                far={4.5}
+            />
+            <Environment preset="city" />
+        </Suspense>
+    );
+}
 
 export function HeroSection() {
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-    const groupRef = useRef<THREE.Group | null>(null);
-
     useEffect(() => {
-        if (!canvasRef.current) return;
-
-        const canvas = canvasRef.current;
-        const container = canvas.parentElement;
-        if (!container) return;
-
-        // Scene Setup
-        const scene = new THREE.Scene();
-        const sizes = {
-            width: container.clientWidth,
-            height: container.clientHeight,
-        };
-
-        const camera = new THREE.PerspectiveCamera(35, sizes.width / sizes.height, 0.1, 100);
-        camera.position.z = 20;
-        scene.add(camera);
-
-        const renderer = new THREE.WebGLRenderer({
-            canvas,
-            antialias: true,
-            alpha: true,
-        });
-        renderer.setSize(sizes.width, sizes.height);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-        // Materials
-        const material = new THREE.MeshPhysicalMaterial({
-            color: 0xf87b1b,
-            metalness: 0.1,
-            roughness: 0.2,
-            transmission: 0.0,
-            clearcoat: 1.0,
-            clearcoatRoughness: 0.1,
-        });
-
-        const secondaryMaterial = new THREE.MeshPhysicalMaterial({
-            color: 0x3355ff,
-            metalness: 0.3,
-            roughness: 0.3,
-            clearcoat: 0.5,
-        });
-
-        // Geometries
-        const geometry = new THREE.TorusGeometry(0.8, 0.3, 16, 100);
-        const geometry2 = new THREE.CapsuleGeometry(1, 4, 4, 16);
-        const geometry3 = new THREE.IcosahedronGeometry(1.2, 0);
-
-        const group = new THREE.Group();
-        scene.add(group);
-        groupRef.current = group;
-
-        // Procedural generation of cluster
-        const objectCount = 15;
-        const objects: THREE.Mesh[] = [];
-
-        for (let i = 0; i < objectCount; i++) {
-            let mesh: THREE.Mesh;
-            const r = Math.random();
-            if (r < 0.33) {
-                mesh = new THREE.Mesh(geometry, material);
-            } else if (r < 0.66) {
-                mesh = new THREE.Mesh(geometry2, secondaryMaterial);
-            } else {
-                mesh = new THREE.Mesh(geometry3, material.clone());
-                (mesh.material as THREE.MeshPhysicalMaterial).color.setHex(0x8844ff);
-            }
-
-            mesh.position.x = (Math.random() - 0.5) * 12;
-            mesh.position.y = (Math.random() - 0.5) * 8;
-            mesh.position.z = (Math.random() - 0.5) * 8;
-
-            mesh.rotation.x = Math.random() * Math.PI;
-            mesh.rotation.y = Math.random() * Math.PI;
-
-            const scale = 0.3 + Math.random() * 0.6;
-            mesh.scale.set(scale, scale, scale);
-
-            group.add(mesh);
-            objects.push(mesh);
-        }
-
-        // Lights
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-        scene.add(ambientLight);
-
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
-        directionalLight.position.set(5, 10, 7);
-        scene.add(directionalLight);
-
-        const spotLight = new THREE.SpotLight(0x3355ff, 10);
-        spotLight.position.set(-10, 10, -5);
-        spotLight.angle = Math.PI / 4;
-        spotLight.penumbra = 1;
-        scene.add(spotLight);
-
-        // Animations
-        gsap.from(group.scale, {
-            duration: 2,
-            x: 1,
-            y: 1,
-            z: 1,
-            ease: 'elastic.out(1, 0.75)',
-            delay: 0.5,
-        });
-
         gsap.to('.hero-statement', {
             duration: 1.5,
             opacity: 1,
@@ -122,70 +85,69 @@ export function HeroSection() {
             ease: 'power3.out',
             delay: 1,
         });
-
-        // Scroll-triggered animation
-        gsap.to(group.rotation, {
-            y: Math.PI * 0.5,
-            scrollTrigger: {
-                trigger: '.hero',
-                start: 'top top',
-                end: 'bottom top',
-                scrub: 1,
-            },
-        });
-
-        // Resize handler
-        const handleResize = () => {
-            if (!container) return;
-            sizes.width = container.clientWidth;
-            sizes.height = container.clientHeight;
-            camera.aspect = sizes.width / sizes.height;
-            camera.updateProjectionMatrix();
-            renderer.setSize(sizes.width, sizes.height);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        };
-        window.addEventListener('resize', handleResize);
-
-        // Animation loop
-        const clock = new THREE.Clock();
-        let animationId: number;
-
-        const tick = () => {
-            const elapsedTime = clock.getElapsedTime();
-
-            objects.forEach((obj, i) => {
-                obj.rotation.x += 0.002 * (i % 2 === 0 ? 1 : -1);
-                obj.rotation.y += 0.003;
-                obj.position.y += Math.sin(elapsedTime * 0.5 + i) * 0.001;
-            });
-
-            renderer.render(scene, camera);
-            animationId = requestAnimationFrame(tick);
-        };
-        tick();
-
-        return () => {
-            window.removeEventListener('resize', handleResize);
-            cancelAnimationFrame(animationId);
-            renderer.dispose();
-            geometry.dispose();
-            geometry2.dispose();
-            geometry3.dispose();
-            material.dispose();
-            secondaryMaterial.dispose();
-        };
     }, []);
+
+    // Double the words for seamless loop
+    const marqueeWords = [...WORDS, ...WORDS];
 
     return (
         <section className="hero" id="hero">
+            <style>
+                {`
+                @keyframes marquee {
+                    0% { transform: translateX(0); }
+                    100% { transform: translateX(-50%); }
+                }
+                .marquee-container {
+                    position: absolute;
+                    top: 50%;
+                    left: 0;
+                    width: 100%;
+                    transform: translateY(-50%);
+                    overflow: hidden;
+                    white-space: nowrap;
+                    pointer-events: none;
+                    z-index: 0;
+                    opacity: 0.15;
+                    user-select: none;
+                }
+                .marquee-content {
+                    display: inline-block;
+                    animation: marquee 30s linear infinite;
+                    font-family: 'Orbitron', sans-serif;
+                    font-size: 12vw;
+                    font-weight: 900;
+                    color: white;
+                    letter-spacing: 0.5rem;
+                }
+                .marquee-word {
+                    display: inline-block;
+                    padding: 0 4rem;
+                }
+                `}
+            </style>
+
             <div className="hero-header">
-                <div className="hero-statement">
+                <div className="hero-statement" style={{ opacity: 0, transform: 'translateY(50px)' }}>
                     Architecting and Building intelligent, creative, and secure solutions.
                 </div>
             </div>
 
-            <div className="canvas-container">
-                <canvas ref={canvasRef} id="webgl"></canvas>
+            <div className="canvas-container" style={{
+                background: 'radial-gradient(circle at 50% 1%, #948E99 -50%, #0f0c29 50%)',
+                position: 'relative'
+            }}>
+                <div className="marquee-container">
+                    <div className="marquee-content">
+                        {marqueeWords.map((word, i) => (
+                            <span key={i} className="marquee-word">{word}</span>
+                        ))}
+                    </div>
+                </div>
+
+                <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 0, ROBOT_CONFIG.cameraDistance], fov: 35 }} style={{ position: 'relative', zIndex: 1 }}>
+                    <RobotScene />
+                </Canvas>
             </div>
 
             <div className="hero-footer">
