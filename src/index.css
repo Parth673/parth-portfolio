@@ -87,8 +87,19 @@ section {
 }
 
 .nav-btn:hover {
-  transform: scale(1.05);
-  background: #ffffff;
+  transform: scale(1.08);
+  /* Slightly more scale */
+  background: #3b82f6;
+  /* Blue background */
+  color: #ffffff;
+  /* White text */
+  padding: 0.9rem 1.6rem;
+  /* Increased height and width */
+}
+
+.nav-btn:hover .dot {
+  background-color: #ffffff;
+  /* White dot on hover */
 }
 
 .dot {
@@ -108,7 +119,8 @@ section {
 }
 
 .chat-btn:hover {
-  background-color: #000;
+  background-color: #2563eb;
+  /* Slightly darker blue for the prominent button */
 }
 
 .chat-btn .dot {
@@ -166,7 +178,10 @@ section {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: all 0.1s ease;
+  padding: 0.5rem 0.8rem;
+  margin: 0 -0.8rem;
+  border-radius: 12px;
+  transition: color 0.3s ease;
 }
 
 .arrow-icon {

@@ -58,24 +58,26 @@ export function Navigation() {
         if (entering) {
             gsap.to(link, {
                 x: 5,
-                backgroundColor: '#eef1ff',
-                paddingLeft: '1rem',
-                paddingRight: '1rem',
+                backgroundColor: '#e0e4efff', // Bright blue
+                color: '#ffffff',
+                padding: '0.8rem 1.5rem',   // Expand height and width
                 duration: 0.3,
+                ease: 'power2.out',
             });
             if (arrow) {
-                gsap.to(arrow, { x: 0, opacity: 1, duration: 0.3 });
+                gsap.to(arrow, { x: 0, opacity: 1, color: '#ffffff', duration: 0.2 });
             }
         } else {
             gsap.to(link, {
                 x: 0,
                 backgroundColor: 'transparent',
-                paddingLeft: '0',
-                paddingRight: '0',
+                color: '#111',
+                padding: '0.5rem 0.8rem',   // Reset to base padding
                 duration: 0.3,
+                ease: 'power2.in',
             });
             if (arrow) {
-                gsap.to(arrow, { x: -10, opacity: 0, duration: 0.3 });
+                gsap.to(arrow, { x: -10, opacity: 0, color: 'inherit', duration: 0.3 });
             }
         }
     };

@@ -4,8 +4,9 @@ export function Footer() {
             <div className="footer-content">
                 <div className="footer-left">
                     <h2 className="footer-title">LET'S CREATE SOMETHING EXTRAORDINARY.</h2>
-                    <button className="footer-cta">
-                        GET IN TOUCH <span className="dot"></span>
+                    <button className="footer-cta explore-work-btn group">
+                        <span className="btn-dot"></span>
+                        <span className="btn-txt">GET IN TOUCH</span>
                     </button>
                 </div>
                 <div className="footer-links">

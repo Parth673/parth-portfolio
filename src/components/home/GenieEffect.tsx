@@ -162,39 +162,35 @@ export function GenieEffect() {
         // GSAP Timeline
         const tl = gsap.timeline({
             scrollTrigger: {
-                trigger: '#scroll-section',
-                start: 'top 50%',
-                end: 'bottom 80%',
+                trigger: "#scroll-section",
+                start: "top 50%",
+                end: "bottom 80%",
                 scrub: 1,
+                onUpdate: () => {
+                    if (uiLayer) {
+                        uiLayer.style.opacity = state.progress >= 0.95 ? '1' : '0';
+                    }
+                },
             },
-            ease: 'power1.inOut',
+            ease: "power1.inOut"
         });
 
-        tl.to('.genie-text-content', {
+        // Animate text out: slide up and fade
+        tl.to(".genie-text-content", {
             y: -300,
             opacity: 0,
             duration: 1.5,
-            ease: 'power2.in',
+            ease: "power2.in"
         }, 0);
 
+        // Animate video expansion
         tl.to(state, {
             progress: 1,
             duration: 2,
-            ease: 'power2.inOut',
-        }, 0.5);
+            ease: "power2.inOut"
+        }, 0.5); // Starts clearly as text is moving out
 
-        // Show/hide play button based on progress
-        ScrollTrigger.create({
-            trigger: '.scroll-section',
-            start: 'top top',
-            end: 'bottom bottom',
-            scrub: 1,
-            onUpdate: () => {
-                if (uiLayer) {
-                    uiLayer.style.opacity = state.progress >= 0.95 ? '1' : '0';
-                }
-            },
-        });
+
 
         const resize = () => {
             const dpr = window.devicePixelRatio || 1;
