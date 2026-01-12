@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import SplitType from 'split-type';
 import { Navigation } from '../components/layout/Navigation';
 import { Footer } from '../components/layout/Footer';
 
@@ -15,20 +16,20 @@ interface ProjectData {
 
 const PROJECTS: ProjectData[] = [
     {
-        title: 'NEURAL NETWORK',
-        description: 'A deep learning visualization tool allowing users to interact with layers in real-time. Built to simplify complex architecture demos.',
-        services: ['Pytorch', 'Three.js', 'React'],
+        title: 'Worldcoin Globe',
+        description: 'In collaboration with Tools for Humanity, we successfully integrated the dynamic Worldcoin 3D globe visualizer onto their website. Our team crafted specialized APIs, empowering the Worldcoin developer team to seamlessly activate visual effects in response to real-time user registration data.',
+        services: ['API Design', '3D Design', 'WebGL'],
         image: '/assets/media/projects/project1.png',
     },
     {
-        title: 'ECOMMERCE V2',
-        description: 'Complete overhaul of a high-traffic fashion retail platform. Focused on performance, SEO, and specific micro-interactions.',
+        title: 'Ecommerce V2',
+        description: 'Complete overhaul of a high-traffic fashion retail platform. Focused on performance, SEO, and specific micro-interactions to increase conversion rates.',
         services: ['Next.js', 'Shopify API', 'GSAP'],
         image: '/assets/media/projects/project2.png',
     },
     {
-        title: "PORTFOLIO '25",
-        description: 'My personal playground for WebGL experiments and layout ideas. Winning Awwwards Site of the Day.',
+        title: "Portfolio '25",
+        description: 'My personal playground for WebGL experiments and layout ideas. Winning Awwwards Site of the Day and showcasing advanced shader techniques.',
         services: ['WebGL', 'GLSL', 'Blender'],
         image: '/assets/media/projects/project3.png',
     },
@@ -38,67 +39,105 @@ export function ProjectsPage() {
     const sectionRef = useRef<HTMLElement>(null);
     const liftContainerRef = useRef<HTMLDivElement>(null);
     const projectDetailsRef = useRef<HTMLDivElement[]>([]);
+    const titleRef = useRef<HTMLHeadingElement>(null);
 
     useEffect(() => {
-        const section = sectionRef.current;
-        const liftContainer = liftContainerRef.current;
-        const projectDetails = projectDetailsRef.current.filter(Boolean);
+        const ctx = gsap.context(() => {
+            // --- Intro Animation ---
+            if (titleRef.current) {
+                const typeSplit = new SplitType(titleRef.current, {
+                    types: 'lines,words,chars',
+                    tagName: 'span',
+                });
 
-        if (!section || !liftContainer || projectDetails.length === 0) return;
+                const introTl = gsap.timeline();
 
-        const totalProjects = projectDetails.length;
+                introTl.from(typeSplit.chars, {
+                    y: '100%',
+                    opacity: 0,
+                    duration: 0.8,
+                    ease: 'power1.inOut',
+                    stagger: 0.05,
+                })
+                    .to(titleRef.current, {
+                        x: () => {
+                            const screenCenter = window.innerWidth / 2;
+                            // Use optional chaining carefully or type assertion if confident
+                            const el = titleRef.current;
+                            if (!el) return 0;
+                            const rect = el.getBoundingClientRect();
+                            const elCenter = rect.left + (rect.width / 2);
+                            return screenCenter - elCenter;
+                        },
+                        duration: 1,
+                        ease: 'power3.inOut',
+                        delay: 0.2
+                    });
+            }
 
-        // Initial State
-        if (totalProjects > 0) {
-            gsap.set(projectDetails[0], { autoAlpha: 1, y: 0 });
-        }
+            // --- Scroll Animation ---
+            const section = sectionRef.current;
+            const liftContainer = liftContainerRef.current;
+            const projectDetails = projectDetailsRef.current.filter(Boolean);
 
-        // Main Timeline
-        const tl = gsap.timeline({
-            scrollTrigger: {
-                trigger: section,
-                start: 'top top',
-                end: '+=3000',
-                scrub: 1,
-                pin: true,
-                anticipatePin: 1,
-            },
-        });
+            if (section && liftContainer && projectDetails.length > 0) {
+                const totalProjects = projectDetails.length;
 
-        // Lift Animation
-        tl.to(liftContainer, {
-            yPercent: -(totalProjects - 1) * 100,
-            ease: 'none',
-            duration: totalProjects - 1,
-        }, 0);
+                // Explicitly set initial states
+                gsap.set(projectDetails[0], { autoAlpha: 1, y: 0 });
+                projectDetails.slice(1).forEach(el => {
+                    gsap.set(el, { autoAlpha: 0, y: 20 });
+                });
+                gsap.set(liftContainer, { yPercent: 0 });
 
-        // Text Animations
-        projectDetails.forEach((detail, index) => {
-            if (index === 0) return;
+                const scrollTl = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: section,
+                        start: 'top top',
+                        end: '+=4000',
+                        scrub: 1,
+                        pin: true,
+                        anticipatePin: 1,
+                        invalidateOnRefresh: true,
+                        snap: {
+                            snapTo: 1 / (totalProjects - 1),
+                            duration: { min: 0.2, max: 0.8 },
+                            delay: 0,
+                            ease: 'power2.inOut'
+                        }
+                    },
+                });
 
-            const prevDetail = projectDetails[index - 1];
-            const startTime = (index - 1) + 0.2;
-            const switchTime = (index - 1) + 0.5;
+                scrollTl.to(liftContainer, {
+                    yPercent: -(totalProjects - 1) * 100,
+                    ease: 'none',
+                    duration: totalProjects - 1,
+                }, 0);
 
-            tl.to(prevDetail, {
-                autoAlpha: 0,
-                y: -20,
-                duration: 0.3,
-            }, startTime);
+                projectDetails.forEach((detail, index) => {
+                    if (index === 0) return;
 
-            tl.fromTo(detail, {
-                autoAlpha: 0,
-                y: 20,
-            }, {
-                autoAlpha: 1,
-                y: 0,
-                duration: 0.3,
-            }, switchTime);
-        });
+                    const prevDetail = projectDetails[index - 1];
+                    const transitionStart = index - 0.5;
 
-        return () => {
-            ScrollTrigger.getAll().forEach(st => st.kill());
-        };
+                    scrollTl.to(prevDetail, {
+                        autoAlpha: 0,
+                        y: -20,
+                        duration: 0.4,
+                        ease: 'power1.in',
+                    }, transitionStart);
+
+                    scrollTl.to(detail, {
+                        autoAlpha: 1,
+                        y: 0,
+                        duration: 0.4,
+                        ease: 'power1.out',
+                    }, transitionStart + 0.4);
+                });
+            }
+        }, sectionRef);
+
+        return () => ctx.revert();
     }, []);
 
     return (
@@ -107,7 +146,7 @@ export function ProjectsPage() {
             <main>
                 {/* Main Projects Title */}
                 <div className="projects-main-header">
-                    <h1 className="big-project-title">PROJECTS</h1>
+                    <h1 className="big-project-title" ref={titleRef}>PROJECTS</h1>
                     <div className="header-meta">
                         <span className="total-count">{PROJECTS.length}</span>
                         <span className="down-arrow">↘</span>
@@ -144,7 +183,7 @@ export function ProjectsPage() {
                                         </div>
                                         <div className="project-btn-wrapper">
                                             <button className="project-btn">
-                                                <span className="dot"></span> VIEW CASE STUDY
+                                                <span className="dot"></span> LAUNCH PROJECT
                                             </button>
                                         </div>
                                     </div>
