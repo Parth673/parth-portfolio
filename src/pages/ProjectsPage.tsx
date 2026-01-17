@@ -35,11 +35,62 @@ const PROJECTS: ProjectData[] = [
     },
 ];
 
+// Placeholder for parallax structure - typical use case involves transparent PNGs
+const PARALLAX_IMAGES: Record<string, { layer1: string; layer2: string; layer3: string }> = {
+    "Worldcoin Globe": {
+        layer1: '/assets/media/project_1_layer1.jpg', // Back
+        layer2: '/assets/media/project_1_layer2.png', // Middle
+        layer3: '/assets/media/project_1_layer3.png', // Front
+    }
+};
+
 export function ProjectsPage() {
     const sectionRef = useRef<HTMLElement>(null);
     const liftContainerRef = useRef<HTMLDivElement>(null);
     const projectDetailsRef = useRef<HTMLDivElement[]>([]);
     const titleRef = useRef<HTMLHeadingElement>(null);
+
+    useEffect(() => {
+        // Mouse Move Parallax Logic
+        const handleMouseMove = (e: MouseEvent) => {
+            const { clientX, clientY } = e;
+            const { innerWidth, innerHeight } = window;
+
+            // Normalize coordinates -1 to 1
+            const xPos = (clientX / innerWidth - 0.5) * 2;
+            const yPos = (clientY / innerHeight - 0.5) * 2;
+
+            // Animate layers
+            // We scale up slightly to ensure coverage while moving
+            gsap.to('.layer-1', {
+                x: xPos * 10,
+                y: yPos * 10,
+                scale: 1.05,
+                duration: 1,
+                ease: 'power2.out'
+            });
+            gsap.to('.layer-2', {
+                x: xPos * 20,
+                y: yPos * 20,
+                scale: 1.05,
+                duration: 1,
+                ease: 'power2.out'
+            });
+            gsap.to('.layer-3', {
+                x: xPos * 30,
+                y: yPos * 30,
+                scale: 1.05,
+                duration: 1,
+                ease: 'power2.out'
+            });
+        };
+
+        window.addEventListener('mousemove', handleMouseMove);
+
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+        };
+    }, []);
 
     useEffect(() => {
         const ctx = gsap.context(() => {
@@ -195,13 +246,32 @@ export function ProjectsPage() {
                         <div className="project-visual-panel">
                             <div className="simple-image-frame">
                                 <div className="image-lift-container" ref={liftContainerRef}>
-                                    {PROJECTS.map((project) => (
-                                        <div
-                                            key={project.title}
-                                            className="lift-image"
-                                            style={{ backgroundImage: `url('${project.image}')` }}
-                                        ></div>
-                                    ))}
+                                    {PROJECTS.map((project) => {
+                                        const layers = PARALLAX_IMAGES[project.title] || {
+                                            layer1: project.image,
+                                            layer2: project.image,
+                                            layer3: project.image
+                                        };
+                                        return (
+                                            <div
+                                                key={project.title}
+                                                className="lift-image"
+                                            >
+                                                <div
+                                                    className="parallax-layer layer-1"
+                                                    style={{ backgroundImage: `url('${layers.layer1}')` }}
+                                                ></div>
+                                                <div
+                                                    className="parallax-layer layer-2"
+                                                    style={{ backgroundImage: `url('${layers.layer2}')` }}
+                                                ></div>
+                                                <div
+                                                    className="parallax-layer layer-3"
+                                                    style={{ backgroundImage: `url('${layers.layer3}')` }}
+                                                ></div>
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                             </div>
                         </div>
