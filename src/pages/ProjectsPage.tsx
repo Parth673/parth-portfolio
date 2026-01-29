@@ -13,6 +13,7 @@ interface ProjectData {
     services: string[];
     recognitions: string[];
     image: string;
+    date: string;
 }
 
 const PROJECTS: ProjectData[] = [
@@ -22,6 +23,7 @@ const PROJECTS: ProjectData[] = [
         services: ['API Design', '3D Design', 'WebGL'],
         recognitions: ['FWA SOTD', 'Awwwards HM'],
         image: '/assets/media/projects/project1.png',
+        date: 'Oct, 23',
     },
     {
         title: 'Ecommerce V2',
@@ -29,6 +31,7 @@ const PROJECTS: ProjectData[] = [
         services: ['Next.js', 'Shopify API', 'GSAP'],
         recognitions: ['CSS Design Award', 'Best UI'],
         image: '/assets/media/projects/project2.png',
+        date: 'Jan, 24',
     },
     {
         title: "Portfolio '25",
@@ -36,6 +39,7 @@ const PROJECTS: ProjectData[] = [
         services: ['WebGL', 'GLSL', 'Blender'],
         recognitions: ['Site of the Day', 'Developer Award'],
         image: '/assets/media/projects/project3.png',
+        date: 'Mar, 25',
     },
 ];
 
@@ -49,10 +53,8 @@ const PARALLAX_IMAGES: Record<string, { layer1: string; layer2: string; layer3: 
 };
 
 export function ProjectsPage() {
-    const sectionRef = useRef<HTMLElement>(null);
-    const liftContainerRef = useRef<HTMLDivElement>(null);
-    const projectDetailsRef = useRef<HTMLDivElement[]>([]);
     const titleRef = useRef<HTMLHeadingElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         // Mouse Move Parallax Logic
@@ -65,7 +67,6 @@ export function ProjectsPage() {
             const yPos = (clientY / innerHeight - 0.5) * 2;
 
             // Animate layers
-            // We scale up slightly to ensure coverage while moving
             gsap.to('.layer-1', {
                 x: xPos * 10,
                 y: yPos * 10,
@@ -98,99 +99,93 @@ export function ProjectsPage() {
 
     useEffect(() => {
         const ctx = gsap.context(() => {
-            // --- Intro Animation ---
+            // --- Intro Title Animation ---
             if (titleRef.current) {
                 const typeSplit = new SplitType(titleRef.current, {
                     types: 'lines,words,chars',
                     tagName: 'span',
                 });
 
-                const introTl = gsap.timeline();
-
-                introTl.from(typeSplit.chars, {
+                gsap.from(typeSplit.chars, {
                     y: '100%',
                     opacity: 0,
                     duration: 0.8,
                     ease: 'power1.inOut',
                     stagger: 0.05,
-                })
-                    .to(titleRef.current, {
-                        x: () => {
-                            const screenCenter = window.innerWidth / 2;
-                            // Use optional chaining carefully or type assertion if confident
-                            const el = titleRef.current;
-                            if (!el) return 0;
-                            const rect = el.getBoundingClientRect();
-                            const elCenter = rect.left + (rect.width / 2);
-                            return screenCenter - elCenter;
-                        },
-                        duration: 1,
-                        ease: 'power3.inOut',
-                        delay: 0.2
-                    });
+                });
             }
 
-            // --- Scroll Animation ---
-            const section = sectionRef.current;
-            const liftContainer = liftContainerRef.current;
-            const projectDetails = projectDetailsRef.current.filter(Boolean);
+            // --- Timeline Line Animation ---
+            // Animate both the line scale and the head dot position
+            const tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: '.timeline-section',
+                    start: 'top 40%',
+                    end: 'bottom 80%',
+                    scrub: 1,
+                }
+            });
 
-            if (section && liftContainer && projectDetails.length > 0) {
-                const totalProjects = projectDetails.length;
-
-                // Explicitly set initial states
-                gsap.set(projectDetails[0], { autoAlpha: 1, y: 0 });
-                projectDetails.slice(1).forEach(el => {
-                    gsap.set(el, { autoAlpha: 0, y: 20 });
-                });
-                gsap.set(liftContainer, { yPercent: 0 });
-
-                const scrollTl = gsap.timeline({
-                    scrollTrigger: {
-                        trigger: section,
-                        start: 'top top',
-                        end: '+=4000',
-                        scrub: 1,
-                        pin: true,
-                        anticipatePin: 1,
-                        invalidateOnRefresh: true,
-                        snap: {
-                            snapTo: 1 / (totalProjects - 1),
-                            duration: { min: 0.2, max: 0.8 },
-                            delay: 0,
-                            ease: 'power2.inOut'
-                        }
-                    },
-                });
-
-                scrollTl.to(liftContainer, {
-                    yPercent: -(totalProjects - 1) * 100,
+            tl.to('.timeline-line-progress', {
+                height: '100%', // Use height for growing line
+                ease: 'none',
+            })
+                .to('.timeline-head-dot', {
+                    top: '100%',
                     ease: 'none',
-                    duration: totalProjects - 1,
-                }, 0);
+                }, '<'); // Run at the same time
 
-                projectDetails.forEach((detail, index) => {
-                    if (index === 0) return;
+            // --- Timeline Rows Animation ---
+            const rows = gsap.utils.toArray('.timeline-row') as HTMLElement[];
+            rows.forEach((row, index) => {
+                const contentCol = row.querySelector('.timeline-content-col');
+                const visualCol = row.querySelector('.timeline-visual-col');
+                const isReversed = index % 2 !== 0;
 
-                    const prevDetail = projectDetails[index - 1];
-                    const transitionStart = index - 0.5;
+                // Animate Content (Slide in from side + fade)
+                gsap.fromTo(contentCol,
+                    {
+                        opacity: 0,
+                        x: isReversed ? -50 : 50 // Slide in towards center
+                    },
+                    {
+                        opacity: 1,
+                        x: 0,
+                        duration: 1,
+                        ease: 'power3.out',
+                        scrollTrigger: {
+                            trigger: row,
+                            start: 'top 75%',
+                            end: 'top 40%',
+                            scrub: 1
+                        }
+                    }
+                );
 
-                    scrollTl.to(prevDetail, {
-                        autoAlpha: 0,
-                        y: -20,
-                        duration: 0.4,
-                        ease: 'power1.in',
-                    }, transitionStart);
-
-                    scrollTl.to(detail, {
-                        autoAlpha: 1,
+                // Animate Visual (Scale up or Reveal)
+                gsap.fromTo(visualCol,
+                    {
+                        opacity: 0,
+                        scale: 0.9,
+                        y: 50
+                    },
+                    {
+                        opacity: 1,
+                        scale: 1,
                         y: 0,
-                        duration: 0.4,
-                        ease: 'power1.out',
-                    }, transitionStart + 0.4);
-                });
-            }
-        }, sectionRef);
+                        duration: 1,
+                        ease: 'power3.out',
+                        scrollTrigger: {
+                            trigger: row,
+                            start: 'top 75%',
+                            end: 'top 40%',
+                            scrub: 1
+                        }
+                    }
+                );
+            });
+
+        }, containerRef);
 
         return () => ctx.revert();
     }, []);
@@ -198,7 +193,7 @@ export function ProjectsPage() {
     return (
         <>
             <Navigation />
-            <main>
+            <main ref={containerRef}>
                 {/* Main Projects Title */}
                 <div className="projects-main-header">
                     <h1 className="big-project-title" ref={titleRef}>PROJECTS</h1>
@@ -208,91 +203,85 @@ export function ProjectsPage() {
                     </div>
                 </div>
 
-                {/* Scroll Pinned Section */}
-                <section className="projects-section" id="projects-section" ref={sectionRef}>
-                    <div className="projects-container">
-                        {/* Left Panel: Text Info */}
-                        <div className="project-info-panel">
-                            <div className="info-slider-wrapper">
-                                {PROJECTS.map((project, index) => (
-                                    <div
-                                        key={project.title}
-                                        className="project-details"
-                                        ref={(el) => {
-                                            if (el) projectDetailsRef.current[index] = el;
-                                        }}
-                                    >
-                                        <h3 className="project-title">{project.title}</h3>
-                                        <div className="project-body-grid">
-                                            <div className="desc-col">
-                                                <p className="project-desc">{project.description}</p>
-                                                <div className="project-btn-wrapper">
-                                                    <button className="project-btn">
-                                                        <span className="dot"></span> LAUNCH PROJECT
-                                                    </button>
-                                                </div>
+                {/* Vertical Timeline Section */}
+                <section className="timeline-section" id="projects-section">
+                    <div className="timeline-line"></div>
+                    <div className="timeline-line-progress"></div>
+                    {/* Independent Head Dot that travels */}
+                    <div className="timeline-line-container">
+                        <div className="timeline-head-dot"></div>
+                    </div>
+
+                    {PROJECTS.map((project, index) => {
+                        const layers = PARALLAX_IMAGES[project.title] || {
+                            layer1: project.image,
+                            layer2: project.image,
+                            layer3: project.image
+                        };
+                        return (
+                            <div key={project.title} className="timeline-row">
+                                {/* Text Content */}
+                                <div className="timeline-content-col">
+                                    <h3 className="project-title">{project.title}</h3>
+                                    <div className="project-body-grid">
+                                        <div className="desc-col">
+                                            <p className="project-desc">{project.description}</p>
+                                            <div className="project-btn-wrapper">
+                                                <button className="project-btn">
+                                                    <span className="dot"></span> LAUNCH PROJECT
+                                                </button>
                                             </div>
-                                            <div className="tech-col">
+                                        </div>
+                                        <div className="tech-col">
+                                            <div className="tech-group">
+                                                <h4 className="tech-label">SERVICES</h4>
+                                                <ul className="tech-stack">
+                                                    {project.services.map((service) => (
+                                                        <li key={service}>{service}</li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+
+                                            {project.recognitions && project.recognitions.length > 0 && (
                                                 <div className="tech-group">
-                                                    <h4 className="tech-label">SERVICES</h4>
+                                                    <h4 className="tech-label" style={{ color: '#3b82f6' }}>RECOGNITIONS</h4>
                                                     <ul className="tech-stack">
-                                                        {project.services.map((service) => (
-                                                            <li key={service}>{service}</li>
+                                                        {project.recognitions.map((rec) => (
+                                                            <li key={rec}>{rec}</li>
                                                         ))}
                                                     </ul>
                                                 </div>
-
-                                                {project.recognitions && project.recognitions.length > 0 && (
-                                                    <div className="tech-group" style={{ marginTop: '2rem' }}>
-                                                        <h4 className="tech-label" style={{ color: '#3b82f6' }}>RECOGNITIONS</h4>
-                                                        <ul className="tech-stack">
-                                                            {project.recognitions.map((rec) => (
-                                                                <li key={rec}>{rec}</li>
-                                                            ))}
-                                                        </ul>
-                                                    </div>
-                                                )}
-                                            </div>
+                                            )}
                                         </div>
                                     </div>
-                                ))}
-                            </div>
-                        </div>
+                                </div>
 
-                        {/* Right Panel: Image Frame */}
-                        <div className="project-visual-panel">
-                            <div className="simple-image-frame">
-                                <div className="image-lift-container" ref={liftContainerRef}>
-                                    {PROJECTS.map((project) => {
-                                        const layers = PARALLAX_IMAGES[project.title] || {
-                                            layer1: project.image,
-                                            layer2: project.image,
-                                            layer3: project.image
-                                        };
-                                        return (
-                                            <div
-                                                key={project.title}
-                                                className="lift-image"
-                                            >
-                                                <div
-                                                    className="parallax-layer layer-1"
-                                                    style={{ backgroundImage: `url('${layers.layer1}')` }}
-                                                ></div>
-                                                <div
-                                                    className="parallax-layer layer-2"
-                                                    style={{ backgroundImage: `url('${layers.layer2}')` }}
-                                                ></div>
-                                                <div
-                                                    className="parallax-layer layer-3"
-                                                    style={{ backgroundImage: `url('${layers.layer3}')` }}
-                                                ></div>
-                                            </div>
-                                        );
-                                    })}
+                                {/* Milestone (Center) */}
+                                <div className="timeline-milestone">
+                                    <div className="milestone-dot"></div>
+                                    <div className="milestone-date">{project.date}</div>
+                                </div>
+
+                                {/* Visual Content */}
+                                <div className="timeline-visual-col">
+                                    <div className="timeline-visual-card">
+                                        <div
+                                            className="parallax-layer layer-1"
+                                            style={{ backgroundImage: `url('${layers.layer1}')` }}
+                                        ></div>
+                                        <div
+                                            className="parallax-layer layer-2"
+                                            style={{ backgroundImage: `url('${layers.layer2}')` }}
+                                        ></div>
+                                        <div
+                                            className="parallax-layer layer-3"
+                                            style={{ backgroundImage: `url('${layers.layer3}')` }}
+                                        ></div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                        );
+                    })}
                 </section>
 
                 <Footer />

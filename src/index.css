@@ -1027,3 +1027,206 @@ section {
   visibility: visible;
   transform: scale(60) translate(0, -1%);
 }
+
+/* ============ TIMELINE PROJECTS ============ */
+.timeline-section {
+  position: relative;
+  padding: 4rem 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+.timeline-line {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: rgba(0, 0, 0, 0.05);
+  /* Very subtle track */
+  transform: translateX(-50%);
+  z-index: 0;
+}
+
+.timeline-line-progress {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 2px;
+  height: 0;
+  /* JS animates this */
+  background: linear-gradient(to bottom, var(--orange), #f45520);
+  transform: translateX(-50%);
+  z-index: 0;
+  box-shadow: 0 0 10px rgba(255, 174, 0, 0.5);
+}
+
+.timeline-line-container {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  transform: translateX(-50%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.timeline-head-dot {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 14px;
+  height: 14px;
+  background: #f45520;
+  border: 2px solid white;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 15px #f45520;
+  z-index: 5;
+}
+
+.timeline-milestone {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  /* Center vertically in the row */
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.milestone-dot {
+  width: 14px;
+  height: 14px;
+  background: var(--bg-color);
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+
+.timeline-row:hover .milestone-dot {
+  border-color: var(--orange);
+  background: var(--orange);
+  box-shadow: 0 0 15px var(--orange);
+}
+
+.milestone-date {
+  position: absolute;
+  white-space: nowrap;
+  left: 20px;
+  font-family: 'Orbitron', sans-serif;
+  /* Or project font */
+  font-size: 0.8rem;
+  color: #666;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.timeline-row:nth-child(even) .milestone-date {
+  left: auto;
+  right: 20px;
+  text-align: right;
+}
+
+.timeline-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12rem;
+  /* Large spacing */
+  position: relative;
+  z-index: 1;
+  gap: 12rem;
+}
+
+.timeline-row:last-child {
+  margin-bottom: 4rem;
+}
+
+.timeline-row:nth-child(even) {
+  flex-direction: row-reverse;
+}
+
+/* Timeline Content Column */
+.timeline-content-col {
+  flex: 1;
+  text-align: right;
+  max-width: 500px;
+  /* Animation states handled by GSAP */
+}
+
+.timeline-row:nth-child(even) .timeline-content-col {
+  text-align: left;
+}
+
+/* Adjust internal layout for the specific alignment */
+.timeline-content-col .project-title {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+.timeline-content-col .project-desc {
+  font-size: 1.1rem;
+  margin-left: auto;
+  /* Push to right */
+  margin-bottom: 2rem;
+}
+
+.timeline-row:nth-child(even) .timeline-content-col .project-desc {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+.timeline-content-col .tech-col {
+  border: none;
+  padding: 0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 3rem;
+  margin-top: 1rem;
+}
+
+.timeline-row:nth-child(even) .timeline-content-col .tech-col {
+  justify-content: flex-start;
+}
+
+.timeline-content-col .project-btn-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2rem;
+}
+
+.timeline-row:nth-child(even) .timeline-content-col .project-btn-wrapper {
+  justify-content: flex-start;
+}
+
+/* Timeline Visual Column */
+.timeline-visual-col {
+  flex: 1;
+  max-width: 600px;
+  /* Animation states handled by GSAP */
+}
+
+.timeline-visual-card {
+  width: 100%;
+  aspect-ratio: 16/10;
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  background: #0d0d0d;
+}
+
+/* Override existing parallax layer to be simpler if needed, 
+   but we will reuse the existing structure .parallax-layer inside this card */
+.timeline-visual-card .parallax-layer {
+  top: -5%;
+  left: -5%;
+  width: 110%;
+  height: 110%;
+}
