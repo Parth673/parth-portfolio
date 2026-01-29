@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SplitType from 'split-type';
@@ -55,6 +55,7 @@ const PARALLAX_IMAGES: Record<string, { layer1: string; layer2: string; layer3: 
 export function ProjectsPage() {
     const titleRef = useRef<HTMLHeadingElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
+    const [activeDateInfo, setActiveDateInfo] = useState<{ date: string, side: 'left' | 'right' } | null>(null);
 
     useEffect(() => {
         // Mouse Move Parallax Logic
@@ -142,6 +143,30 @@ export function ProjectsPage() {
                 const visualCol = row.querySelector('.timeline-visual-col');
                 const isReversed = index % 2 !== 0;
 
+                // Update Active Date when passing this row
+                // We want the "pickup" to happen when the line tip (head dot) reaches this row's center.
+                // Since the line tip is animated based on section scroll, we align with that.
+
+                ScrollTrigger.create({
+                    trigger: row.querySelector('.timeline-milestone'),
+                    start: 'top 45%', // Visual alignment for line tip meeting dot
+                    end: 'bottom top',
+                    toggleActions: 'play none none reverse',
+                    onEnter: () => {
+                        setActiveDateInfo({ date: PROJECTS[index].date, side: isReversed ? 'left' : 'right' });
+                    },
+                    onLeaveBack: () => {
+                        if (index > 0) {
+                            // Restore previous
+                            const prevReversed = (index - 1) % 2 !== 0;
+                            setActiveDateInfo({ date: PROJECTS[index - 1].date, side: prevReversed ? 'left' : 'right' });
+                        } else {
+                            setActiveDateInfo(null);
+                        }
+                    }
+                });
+
+
                 // Animate Content (Slide in from side + fade)
                 gsap.fromTo(contentCol,
                     {
@@ -209,10 +234,14 @@ export function ProjectsPage() {
                     <div className="timeline-line-progress"></div>
                     {/* Independent Head Dot that travels */}
                     <div className="timeline-line-container">
-                        <div className="timeline-head-dot"></div>
+                        <div className="timeline-head-dot">
+                            <div className={`head-dot-date-label ${activeDateInfo ? 'visible' : ''} ${activeDateInfo?.side || ''}`}>
+                                {activeDateInfo?.date}
+                            </div>
+                        </div>
                     </div>
 
-                    {PROJECTS.map((project, index) => {
+                    {PROJECTS.map((project) => {
                         const layers = PARALLAX_IMAGES[project.title] || {
                             layer1: project.image,
                             layer2: project.image,
@@ -259,7 +288,6 @@ export function ProjectsPage() {
                                 {/* Milestone (Center) */}
                                 <div className="timeline-milestone">
                                     <div className="milestone-dot"></div>
-                                    <div className="milestone-date">{project.date}</div>
                                 </div>
 
                                 {/* Visual Content */}
