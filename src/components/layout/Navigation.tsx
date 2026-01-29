@@ -54,28 +54,54 @@ export function Navigation() {
     const handleMenuLinkHover = (e: React.MouseEvent<HTMLAnchorElement>, entering: boolean) => {
         const link = e.currentTarget;
         const arrow = link.querySelector('.arrow-icon');
+        const originalText = link.querySelector('.nav-text-original');
+        const cloneText = link.querySelector('.nav-text-clone');
 
         if (entering) {
             gsap.to(link, {
                 x: 5,
-                backgroundColor: '#e0e4efff', // Bright blue
-                color: '#ffffff',
-                padding: '0.8rem 1.5rem',   // Expand height and width
+                backgroundColor: '#e5e7fd',
+                color: '#000000',
+                borderRadius: '50px',
+                scale: 1.02,
+                padding: '0.7rem 1.2rem',
                 duration: 0.3,
                 ease: 'power2.out',
             });
+
+            // Vending machine roll effect (up)
+            if (originalText && cloneText) {
+                gsap.to([originalText, cloneText], {
+                    y: '-100%',
+                    duration: 0.4,
+                    ease: 'power3.out'
+                });
+            }
+
             if (arrow) {
-                gsap.to(arrow, { x: 0, opacity: 1, color: '#ffffff', duration: 0.2 });
+                gsap.to(arrow, { x: 0, opacity: 1, color: '#000000', duration: 0.2 });
             }
         } else {
             gsap.to(link, {
                 x: 0,
                 backgroundColor: 'transparent',
                 color: '#111',
-                padding: '0.5rem 0.8rem',   // Reset to base padding
+                borderRadius: '12px',
+                scale: 1,
+                padding: '0.5rem 0.8rem',
                 duration: 0.3,
                 ease: 'power2.in',
             });
+
+            // Reset roll effect (down)
+            if (originalText && cloneText) {
+                gsap.to([originalText, cloneText], {
+                    y: '0%',
+                    duration: 0.4,
+                    ease: 'power3.in'
+                });
+            }
+
             if (arrow) {
                 gsap.to(arrow, { x: -10, opacity: 0, color: 'inherit', duration: 0.3 });
             }
@@ -115,7 +141,11 @@ export function Navigation() {
                                     onMouseEnter={(e) => handleMenuLinkHover(e, true)}
                                     onMouseLeave={(e) => handleMenuLinkHover(e, false)}
                                 >
-                                    {item.label} <span className="arrow-icon">→</span>
+                                    <div className="nav-text-wrapper" style={{ position: 'relative', overflow: 'hidden', height: '1.2em' }}>
+                                        <span className="nav-text-original" style={{ display: 'block' }}>{item.label}</span>
+                                        <span className="nav-text-clone" style={{ display: 'block', position: 'absolute', top: '100%', left: 0 }}>{item.label}</span>
+                                    </div>
+                                    <span className="arrow-icon">→</span>
                                 </Link>
                             </li>
                         ))}

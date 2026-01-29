@@ -164,7 +164,7 @@ export function GenieEffect() {
             scrollTrigger: {
                 trigger: "#scroll-section",
                 start: "top 50%",
-                end: "bottom 80%",
+                end: "bottom bottom",
                 scrub: 1,
                 onUpdate: () => {
                     if (uiLayer) {
