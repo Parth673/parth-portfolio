@@ -792,37 +792,45 @@ section {
 }
 
 .project-title {
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 600;
+  font-size: clamp(3rem, 5vw, 5rem);
+  font-weight: 500;
   margin-bottom: 2rem;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: #000;
 }
 
 .project-body-grid {
   display: flex;
-  gap: 3rem;
+  gap: 2rem;
   margin-bottom: 2rem;
 }
 
 .desc-col {
-  flex: 2;
+  flex: 1.2;
 }
 
 .project-desc {
-  font-size: 0.9rem;
-  color: #666;
-  line-height: 1.7;
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.6;
+  max-width: 90%;
 }
 
 .tech-col {
-  flex: 1;
+  flex: 0.8;
+  padding-left: 2rem;
+  border-left: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .tech-label {
-  font-size: 0.65rem;
-  letter-spacing: 0.15em;
-  color: #666;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: #3b82f6;
+  /* Blue based on image */
   margin-bottom: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
 .tech-stack {
@@ -831,8 +839,10 @@ section {
 }
 
 .tech-stack li {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   margin-bottom: 0.4rem;
+  color: #333;
+  font-weight: 500;
 }
 
 .project-btn-wrapper {
@@ -840,45 +850,59 @@ section {
 }
 
 .project-btn {
-  background: #000;
+  background: #ffffff;
   border: none;
-  color: #fff;
+  color: #3b82f6;
+  /* Blue text */
   padding: 1rem 2rem;
-  font-size: 0.8rem;
-  letter-spacing: 0.1em;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
   border-radius: 40px;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 0.8rem;
-  font-weight: 600;
+  font-weight: 700;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.15);
+  /* Light blue shadow */
 }
 
 .project-btn:hover {
-  background: #333;
+  background: #3b82f6;
+  color: #fff;
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
 }
 
 .project-btn .dot {
-  width: 6px;
-  height: 6px;
-  background-color: #fff;
+  width: 8px;
+  height: 8px;
+  background-color: #3b82f6;
   border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+.project-btn:hover .dot {
+  background-color: #ffffff;
 }
 
 .project-visual-panel {
   flex: 1;
+  /* 50-50 split */
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
+  /* Align right */
+  padding-left: 2rem;
 }
 
 .simple-image-frame {
   width: 100%;
-  max-width: 350px;
-  aspect-ratio: 4/5;
+  max-width: none;
+  /* Let it grow */
+  aspect-ratio: 16/10;
+  /* Landscape */
   overflow: hidden;
   border-radius: 30px;
   position: relative;

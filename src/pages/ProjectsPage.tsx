@@ -11,6 +11,7 @@ interface ProjectData {
     title: string;
     description: string;
     services: string[];
+    recognitions: string[];
     image: string;
 }
 
@@ -19,18 +20,21 @@ const PROJECTS: ProjectData[] = [
         title: 'Worldcoin Globe',
         description: 'In collaboration with Tools for Humanity, we successfully integrated the dynamic Worldcoin 3D globe visualizer onto their website. Our team crafted specialized APIs, empowering the Worldcoin developer team to seamlessly activate visual effects in response to real-time user registration data.',
         services: ['API Design', '3D Design', 'WebGL'],
+        recognitions: ['FWA SOTD', 'Awwwards HM'],
         image: '/assets/media/projects/project1.png',
     },
     {
         title: 'Ecommerce V2',
         description: 'Complete overhaul of a high-traffic fashion retail platform. Focused on performance, SEO, and specific micro-interactions to increase conversion rates.',
         services: ['Next.js', 'Shopify API', 'GSAP'],
+        recognitions: ['CSS Design Award', 'Best UI'],
         image: '/assets/media/projects/project2.png',
     },
     {
         title: "Portfolio '25",
         description: 'My personal playground for WebGL experiments and layout ideas. Winning Awwwards Site of the Day and showcasing advanced shader techniques.',
         services: ['WebGL', 'GLSL', 'Blender'],
+        recognitions: ['Site of the Day', 'Developer Award'],
         image: '/assets/media/projects/project3.png',
     },
 ];
@@ -222,20 +226,33 @@ export function ProjectsPage() {
                                         <div className="project-body-grid">
                                             <div className="desc-col">
                                                 <p className="project-desc">{project.description}</p>
+                                                <div className="project-btn-wrapper">
+                                                    <button className="project-btn">
+                                                        <span className="dot"></span> LAUNCH PROJECT
+                                                    </button>
+                                                </div>
                                             </div>
                                             <div className="tech-col">
-                                                <h4 className="tech-label">SERVICES</h4>
-                                                <ul className="tech-stack">
-                                                    {project.services.map((service) => (
-                                                        <li key={service}>{service}</li>
-                                                    ))}
-                                                </ul>
+                                                <div className="tech-group">
+                                                    <h4 className="tech-label">SERVICES</h4>
+                                                    <ul className="tech-stack">
+                                                        {project.services.map((service) => (
+                                                            <li key={service}>{service}</li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+
+                                                {project.recognitions && project.recognitions.length > 0 && (
+                                                    <div className="tech-group" style={{ marginTop: '2rem' }}>
+                                                        <h4 className="tech-label" style={{ color: '#3b82f6' }}>RECOGNITIONS</h4>
+                                                        <ul className="tech-stack">
+                                                            {project.recognitions.map((rec) => (
+                                                                <li key={rec}>{rec}</li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+                                                )}
                                             </div>
-                                        </div>
-                                        <div className="project-btn-wrapper">
-                                            <button className="project-btn">
-                                                <span className="dot"></span> LAUNCH PROJECT
-                                            </button>
                                         </div>
                                     </div>
                                 ))}
