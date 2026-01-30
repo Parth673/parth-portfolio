@@ -3,61 +3,61 @@ import React from 'react';
 const OurServices = () => {
   const services = [
     {
-      title: 'Tutorials',
-      image: 'https://images.ctfassets.net/euak42jj5j5q/4vb1pKDnAzBthk3H5ikQuu/e97a04a6a11e6d23199ac52d6bebcc03/Slide-Blue.png',
+      title: 'Finetuning Models',
+      image: '/assets/media/services/ai_sticker.png',
+      headline: 'Your Data, Our Expertise: Specialized Intelligence for Your Business',
+      lists: [
+        ['LLM:', 'OCR:', 'Embedding Models:'],
+        ['Qwen3.5, Gemma3', 'DeepSeek OCR', 'embeddinggemma-300m']
+      ],
+      type: 'list',
+      background: '#8a53efff',
+    },
+    {
+      title: 'CAD',
+      image: '/assets/media/services/cad_sticker.png',
       video: '//videos.ctfassets.net/euak42jj5j5q/EWkoymANyYxKGT5uwDzeF/74be845e8f910ce42e0b923835b27f23/tutorial-04-compressed.mp4',
-      description: 'Tune in for weekly tutorials led by our experts and elevate your production skills.',
+      description: 'Mechanical, Electrical, Product Design, 3D Modeling',
       type: 'video',
-      background: '#5368efff',
+      background: '#5394efff',
     },
     {
-      title: 'Track Feedback',
-      image: 'https://images.ctfassets.net/euak42jj5j5q/6H4qgQtxSDAifMv0t2DKr1/1bd252f08ad01aec80d8e941666a3bf1/Fresh-Mix-Pink.png',
-      headline: 'Submit your latest tracks for feedback and get expert advice.',
+      title: 'Software Dev',
+      image: '/assets/media/services/code_sticker.png',
+      headline: 'Enterprise-Grade Cybersecurity Solutions with AI integration',
       lists: [
-        ['Basic tier:', 'Standard tier:', 'Premium tier:'],
-        ['From other members', '2x Track Feedback', '5x Track Feedback']
+        ['Autonomous:', 'Enterprise:', 'Embedded Firmware:'],
+        ['AI Agents', 'Scalable', 'Efficient']
       ],
       type: 'list',
-      background: '#ef5360ff',
+      background: '#91ff24ff',
     },
     {
-      title: 'Discord',
-      image: 'https://images.ctfassets.net/euak42jj5j5q/6lqGXvJdx1bcZ9MPDm0V5R/d13c056d77313ca8baa4d52e61f4c2f8/Vinyl-Hand-Lime.png',
+      title: 'Animation',
+      image: '/assets/media/services/camera_sticker.png',
       video: '//videos.ctfassets.net/euak42jj5j5q/5obWg8fD7hMq7VavjpNRxv/82825794ed63f0e678162b6ec007c5c6/service-02-compressed.mp4',
-      description: 'Join our vibrant community of electronic music producers and make new connections.',
+      description: 'We specialize in 2D and 3D animation videos that captivate customers.',
       type: 'video',
-      background: '#82ef53ff',
+      background: '#ff5900ff',
     },
     {
-      title: 'Livestreams',
-      image: 'https://images.ctfassets.net/euak42jj5j5q/4lokua14O7EPxGfjLXfuPR/837e46afb7a62a7681037e1c8bf03008/Wet-Danceflor.png',
-      headline: 'Watch weekly livestreams from our coaches and learn to navigate your journey.',
+      title: 'VAPT (CyberSec)',
+      image: '/assets/media/services/bug_sticker.png',
+      headline: 'Don\'t Be the Next Breach Headline. Comprehensive VAPT Services',
       lists: [
-        ['Track Feedback', 'Ask the Pros'],
-        ['Social Media', 'Career Growth']
+        ['Application PenTest', 'Network Security'],
+        ['API Security', 'Reporting']
       ],
       type: 'list',
-      background: '#ebd441ff',
+      background: '#ff1e4bff',
     },
     {
-      title: 'DJ Promo',
-      image: 'https://images.ctfassets.net/euak42jj5j5q/6XscFVAj8Pl6SMoWTshuxj/5a821becba2829b49970144f9cb557fe/Spinning-Vinyl.png',
+      title: 'Tutor',
+      image: '/assets/media/services/pencil_sticker.png',
       video: '//videos.ctfassets.net/euak42jj5j5q/7eMCyGP3ZD2cjGKS0IdKhW/a61aad2652ccd1b873f0914a2de8163a/service-03-compressed.mp4',
       description: 'Submit your music for a chance to be played by top DJs in the industry. /Premium Only',
       type: 'video',
-      background: '#ffffffff',
-    },
-    {
-      title: 'Rewards',
-      image: 'https://images.ctfassets.net/euak42jj5j5q/15AuPJp1QP5iS2AGlfuM9v/b022bf186abfef3edc78e206a0ea2e93/Hat-Orange.png',
-      headline: 'Tune in for weekly giveaways and get exclusive discounts on packs, plugins and more.',
-      lists: [
-        ['Private Lessons', 'Plugins', 'Services'],
-        ['Sample Packs', 'Presets', 'Early Access']
-      ],
-      type: 'list',
-      background: '#f66e33ff',
+      background: '#edcabaff',
     }
   ];
 
