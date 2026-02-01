@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -17,17 +17,13 @@ const fragmentShaderSource = `
   uniform vec2 iResolution;
   uniform vec2 uImageResolution;
   uniform float uProgress;
+  uniform vec4 uTargetRect; // x, y, width, height
   uniform sampler2D iChannel0;
 
   const float SQUEEZE_INTENSITY = 0.12; 
   const float WAVE_INTENSITY = 0.04;    
   const float WAVE_FREQUENCY = 6.0;    
   const float WAVE_SPEED = 12.0;       
-  
-  const float TARGET_X = 0.04;
-  const float TARGET_Y = 0.4;
-  const float TARGET_WIDTH = 0.35;
-  const float TARGET_HEIGHT = 0.5;
 
   vec2 remap(vec2 uv, vec2 inputLow, vec2 inputHigh, vec2 outputLow, vec2 outputHigh) {
       vec2 t = (uv - inputLow) / (inputHigh - inputLow);
@@ -46,10 +42,10 @@ const fragmentShaderSource = `
       float curvature = sin(uv.x * 3.14159) * SQUEEZE_INTENSITY * p;
       float wave = sin(uv.y * WAVE_FREQUENCY + (1.0 - uProgress) * WAVE_SPEED) * WAVE_INTENSITY * p * (1.0 - uv.x);
 
-      float min_x = mix(TARGET_X, 0.0, uProgress);
-      float max_x = mix(TARGET_X + TARGET_WIDTH, 1.0, uProgress);
-      float base_min_y = mix(TARGET_Y, 0.0, uProgress);
-      float base_max_y = mix(TARGET_Y + TARGET_HEIGHT, 1.0, uProgress);
+      float min_x = mix(uTargetRect.x, 0.0, uProgress);
+      float max_x = mix(uTargetRect.x + uTargetRect.z, 1.0, uProgress);
+      float base_min_y = mix(uTargetRect.y, 0.0, uProgress);
+      float base_max_y = mix(uTargetRect.y + uTargetRect.w, 1.0, uProgress);
 
       float final_min_y = base_min_y + curvature + wave;
       float final_max_y = base_max_y - curvature - wave;
@@ -100,6 +96,49 @@ export function GenieEffect() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const wrapperRef = useRef<HTMLDivElement>(null);
     const uiLayerRef = useRef<HTMLDivElement>(null);
+    const modalVideoRef = useRef<HTMLVideoElement>(null);
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [currentTime, setCurrentTime] = useState(0);
+    const [duration, setDuration] = useState(0);
+    const [isMuted, setIsMuted] = useState(false);
+    const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
+
+    useEffect(() => {
+        if (isModalOpen) {
+            document.documentElement.classList.add('video-modal-active');
+            document.body.classList.add('video-modal-active');
+            if (modalVideoRef.current) {
+                modalVideoRef.current.play().catch(err => console.log("Auto-play blocked:", err));
+            }
+        } else {
+            document.documentElement.classList.remove('video-modal-active');
+            document.body.classList.remove('video-modal-active');
+        }
+
+        return () => {
+            document.documentElement.classList.remove('video-modal-active');
+            document.body.classList.remove('video-modal-active');
+        };
+    }, [isModalOpen]);
+
+    const handlePlayClick = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleMouseMove = (e: React.MouseEvent) => {
+        setCursorPos({ x: e.clientX, y: e.clientY });
+    };
+
+    const toggleMute = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setIsMuted(!isMuted);
+    };
+
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -162,33 +201,38 @@ export function GenieEffect() {
         // GSAP Timeline
         const tl = gsap.timeline({
             scrollTrigger: {
-                trigger: "#scroll-section",
-                start: "top 50%",
+                trigger: ".scroll-container",
+                start: "top top",
                 end: "bottom bottom",
-                scrub: 1,
-                onUpdate: () => {
-                    if (uiLayer) {
-                        uiLayer.style.opacity = state.progress >= 0.95 ? '1' : '0';
-                    }
-                },
+                scrub: true,
+                pin: "#scroll-section",
+                invalidateOnRefresh: true,
+                anticipatePin: 1,
             },
-            ease: "power1.inOut"
+            onUpdate: () => {
+                if (uiLayer) {
+                    const isVisible = state.progress >= 0.95;
+                    uiLayer.style.opacity = isVisible ? '1' : '0';
+                    uiLayer.style.pointerEvents = isVisible ? 'auto' : 'none';
+                }
+            }
         });
 
-        // Animate text out: slide up and fade
+        // Use lazy: false for crucial WebGL updates
         tl.to(".genie-text-content", {
             y: -300,
             opacity: 0,
-            duration: 1.5,
-            ease: "power2.in"
+            duration: 1,
+            ease: "power1.in",
+            lazy: false
         }, 0);
 
-        // Animate video expansion
         tl.to(state, {
             progress: 1,
             duration: 2,
-            ease: "power2.inOut"
-        }, 0.5); // Starts clearly as text is moving out
+            ease: "power2.inOut",
+            lazy: false
+        }, 0.5);
 
 
 
@@ -205,6 +249,17 @@ export function GenieEffect() {
 
         let animationId: number;
 
+        const getTargetRect = () => {
+            if (window.innerWidth < 1024) {
+                // Mobile layout - centered box in the lower middle
+                // x=0.1, y=0.35, w=0.8, h=0.5 (centered horizontally, taking 80% width)
+                return [0.1, 0.35, 0.8, 0.5];
+            } else {
+                // Original layout - small box on the left
+                return [0.04, 0.4, 0.35, 0.5];
+            }
+        };
+
         const animate = () => {
             if (!videoReady) {
                 animationId = requestAnimationFrame(animate);
@@ -219,9 +274,11 @@ export function GenieEffect() {
 
             gl.useProgram(program);
 
+            const rect = getTargetRect();
             gl.uniform1f(gl.getUniformLocation(program, 'uProgress'), state.progress);
             gl.uniform2f(gl.getUniformLocation(program, 'iResolution'), canvas.width, canvas.height);
             gl.uniform2f(gl.getUniformLocation(program, 'uImageResolution'), videoRes[0], videoRes[1]);
+            gl.uniform4f(gl.getUniformLocation(program, 'uTargetRect'), rect[0], rect[1], rect[2], rect[3]);
             gl.uniform1i(gl.getUniformLocation(program, 'iChannel0'), 0);
 
             const posLoc = gl.getAttribLocation(program, 'aPosition');
@@ -234,11 +291,15 @@ export function GenieEffect() {
 
         animate();
 
+        // Refresh to ensure accurate calculations
+        ScrollTrigger.refresh();
+
         return () => {
             window.removeEventListener('resize', resize);
             cancelAnimationFrame(animationId);
             video.pause();
             video.src = '';
+            tl.kill(); // This kills the ScrollTrigger as well
         };
     }, []);
 
@@ -261,7 +322,11 @@ export function GenieEffect() {
                     <canvas ref={canvasRef} id="genie-canvas"></canvas>
                     <div className="ui-layer" id="video-ui-layer" ref={uiLayerRef}>
                         <div className="content">
-                            <button className="play-button" id="video-play-button">
+                            <button
+                                className="play-button"
+                                id="video-play-button"
+                                onClick={handlePlayClick}
+                            >
                                 <svg viewBox="0 0 24 24" fill="currentColor">
                                     <path d="M8 5v14l11-7z" />
                                 </svg>
@@ -270,6 +335,53 @@ export function GenieEffect() {
                     </div>
                 </div>
             </div>
+
+            {isModalOpen && (
+                <div
+                    className="video-full-screen-overlay"
+                    onClick={handleCloseModal}
+                    onMouseMove={handleMouseMove}
+                >
+                    <video
+                        ref={modalVideoRef}
+                        src="/assets/media/videos/show_reel.mp4"
+                        autoPlay
+                        loop
+                        muted={isMuted}
+                        className="modal-video"
+                        onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
+                        onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
+                    />
+
+                    <div
+                        className="video-custom-cursor"
+                        style={{
+                            left: cursorPos.x,
+                            top: cursorPos.y,
+                            transform: 'translate(-50%, -50%)'
+                        }}
+                    >
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5">
+                            <path d="M18 6L6 18M6 6l12 12" />
+                        </svg>
+                    </div>
+
+                    <div className="video-timeline-container" onClick={(e) => e.stopPropagation()}>
+                        <div className="timeline-labels">
+                            <span className="label-play">PLAY</span>
+                            <div className="timeline-track">
+                                <div
+                                    className="timeline-progress"
+                                    style={{ width: `${(currentTime / duration) * 100}%` }}
+                                />
+                            </div>
+                            <span className="label-mute" onClick={toggleMute}>
+                                {isMuted ? 'UNMUTE' : 'MUTE'}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

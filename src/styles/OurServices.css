@@ -9,14 +9,42 @@
 }
 
 .services-section {
-  padding: 4rem 1rem;
-  /* Adjust padding as needed match section--medium--margin */
+  padding: 6rem 1rem;
+  background-color: #050505;
+  background-image: radial-gradient(circle at 50% -20%, #1a1a1a 0%, #050505 80%);
+  position: relative;
+  overflow: hidden;
+}
+
+.bg-blob {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, var(--blob-color) 0%, transparent 70%);
+  filter: blur(80px);
+  opacity: 0.15;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.blob-1 {
+  top: -100px;
+  left: -100px;
+  --blob-color: #8a53ef;
+}
+
+.blob-2 {
+  bottom: -100px;
+  right: -100px;
+  --blob-color: #5394ef;
 }
 
 .services-container {
   max-width: 1536px;
   /* 2xl breakpoint */
   margin: 0 auto;
+  position: relative;
+  z-index: 1;
 }
 
 .services-header {
@@ -59,11 +87,34 @@
 .section-title {
   /* offbit-101-bold - assuming font handled externally or ignored as per instruction */
   text-transform: uppercase;
-  letter-spacing: 0.025em;
+  letter-spacing: 0.05em;
   /* tracking-wide */
   /* fluid-text--base - using fallback size */
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-weight: 700;
+  display: flex;
+  align-items: center;
+}
+
+.cursor {
+  display: inline-block;
+  width: 0.6rem;
+  height: 1.5rem;
+  background-color: var(--color-white);
+  margin-right: 0.5rem;
+  animation: blink-cursor 0.8s step-end infinite;
+}
+
+@keyframes blink-cursor {
+
+  from,
+  to {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
 }
 
 .services-grid {
@@ -351,6 +402,8 @@
   border: none;
   padding: 0;
   cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
 }
 
 .card-button:hover {

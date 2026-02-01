@@ -26,7 +26,6 @@ body {
   background-color: var(--bg-color);
   color: var(--text-color);
   overflow-x: hidden;
-  scroll-behavior: smooth;
 }
 
 /* Main Content Structure */
@@ -345,22 +344,22 @@ section {
 }
 
 .scroll-container {
-  height: 100%;
+  height: 150vh;
   width: 100%;
-  /* position: relative; */
+  position: relative;
 }
 
 .genie-wrapper {
-  position: sticky;
-  top: 0;
+  position: relative;
   height: 100vh;
   pointer-events: none;
   overflow: hidden;
   z-index: 5;
+  will-change: transform;
 }
 
 .genie-text-overlay {
-  position: sticky;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
@@ -368,13 +367,14 @@ section {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding-right: 10%;
-  z-index: 5;
+  padding: 0 10%;
+  z-index: 10;
   pointer-events: none;
 }
 
 .genie-text-content {
-  max-width: 600px;
+  max-width: 500px;
+  width: 100%;
   pointer-events: auto;
   color: var(--text-color);
   will-change: transform, opacity;
@@ -385,18 +385,41 @@ section {
   pointer-events: auto;
   width: 90%;
   max-width: 1600px;
-  height: 70%;
+  height: 70vh;
   position: absolute;
-  top: 20%;
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
+}
+
+@media (max-width: 1024px) {
+  .scroll-container {
+    height: 200vh;
+  }
+
+  .genie-text-overlay {
+    justify-content: center;
+    align-items: flex-start;
+    padding: 10vh 2rem 0;
+  }
+
+  .genie-text-content {
+    text-align: center;
+    max-width: 100%;
+  }
+
+  .genie-container {
+    width: 95%;
+    height: 50vh;
+    top: 60%;
+  }
 }
 
 #genie-canvas {
-  position: sticky;
-  border-radius: var(--border-radius);
   width: 100%;
   height: 100%;
+  border-radius: var(--border-radius);
+  display: block;
 }
 
 .ui-layer {
@@ -1250,4 +1273,143 @@ section {
   left: -5%;
   width: 110%;
   height: 110%;
+}
+
+/* ============ VIDEO MODAL ============ */
+.video-full-screen-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: black;
+  z-index: 9999;
+  cursor: none;
+  /* Hide default cursor */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* Hide navigation when video modal is active and lock scroll */
+html.video-modal-active,
+body.video-modal-active {
+  overflow: hidden !important;
+  touch-action: none !important;
+  scrollbar-width: none !important;
+  /* Firefox */
+  -ms-overflow-style: none !important;
+  /* IE and Edge */
+}
+
+html.video-modal-active::-webkit-scrollbar,
+body.video-modal-active::-webkit-scrollbar {
+  display: none !important;
+  /* Chrome, Safari, Opera */
+}
+
+body.video-modal-active .logo,
+body.video-modal-active .nav-right,
+body.video-modal-active .navigation-bar {
+  display: none !important;
+}
+
+.modal-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.video-custom-cursor {
+  position: fixed;
+  width: 64px;
+  height: 64px;
+  background: white;
+  border-radius: 50%;
+  padding: 16px;
+  pointer-events: none;
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #111;
+}
+
+.video-custom-cursor svg {
+  width: 100%;
+  height: 100%;
+  stroke-width: 1.5;
+}
+
+.video-timeline-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 40px 60px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.5), transparent);
+  color: white;
+  z-index: 10001;
+  pointer-events: auto;
+}
+
+.timeline-labels {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  font-size: 0.75rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+}
+
+.timeline-track {
+  flex-grow: 1;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.15);
+  position: relative;
+  border-radius: 2px;
+}
+
+.timeline-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: white;
+  border-radius: 2px;
+}
+
+.label-play,
+.label-mute {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  user-select: none;
+  min-width: 65px;
+}
+
+.label-play {
+  text-align: left;
+}
+
+.label-mute {
+  text-align: right;
+}
+
+.label-play:hover,
+.label-mute:hover {
+  opacity: 0.7;
+  letter-spacing: 0.2em;
+}
+
+@media (max-width: 768px) {
+  .video-timeline-container {
+    padding: 20px 30px;
+  }
+
+  .timeline-labels {
+    gap: 15px;
+  }
 }

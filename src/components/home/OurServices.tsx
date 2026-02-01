@@ -12,14 +12,16 @@ const OurServices = () => {
       ],
       type: 'list',
       background: '#8a53efff',
+      href: '/services/finetuning'
     },
     {
       title: 'CAD',
       image: '/assets/media/services/cad_sticker.png',
-      video: '//videos.ctfassets.net/euak42jj5j5q/EWkoymANyYxKGT5uwDzeF/74be845e8f910ce42e0b923835b27f23/tutorial-04-compressed.mp4',
+      video: '/assets/media/videos/cad_demo.mp4',
       description: 'Mechanical, Electrical, Product Design, 3D Modeling',
       type: 'video',
       background: '#5394efff',
+      href: '/services/cad'
     },
     {
       title: 'Software Dev',
@@ -31,14 +33,16 @@ const OurServices = () => {
       ],
       type: 'list',
       background: '#91ff24ff',
+      href: '/services/software-dev'
     },
     {
       title: 'Animation',
       image: '/assets/media/services/camera_sticker.png',
-      video: '//videos.ctfassets.net/euak42jj5j5q/5obWg8fD7hMq7VavjpNRxv/82825794ed63f0e678162b6ec007c5c6/service-02-compressed.mp4',
+      video: '/assets/media/videos/anime_demo.mp4',
       description: 'We specialize in 2D and 3D animation videos that captivate customers.',
       type: 'video',
       background: '#ff5900ff',
+      href: '/services/animation'
     },
     {
       title: 'VAPT (CyberSec)',
@@ -50,25 +54,29 @@ const OurServices = () => {
       ],
       type: 'list',
       background: '#ff1e4bff',
+      href: '/services/vapt'
     },
     {
       title: 'Tutor',
       image: '/assets/media/services/pencil_sticker.png',
-      video: '//videos.ctfassets.net/euak42jj5j5q/7eMCyGP3ZD2cjGKS0IdKhW/a61aad2652ccd1b873f0914a2de8163a/service-03-compressed.mp4',
-      description: 'Submit your music for a chance to be played by top DJs in the industry. /Premium Only',
+      video: '/assets/media/videos/tutor_demo.mp4',
+      description: '2+y experience in teaching. Math, CS, Deep Learning',
       type: 'video',
-      background: '#edcabaff',
+      background: '#ffea00ff',
+      href: '/services/tutor'
     }
   ];
 
   return (
     <section className="services-section">
+      <div className="bg-blob blob-1"></div>
+      <div className="bg-blob blob-2"></div>
       <div className="services-container">
         <div className="services-header">
           <div className="header-content">
             <div className="kick-bass-square"></div>
             <h2 className="section-title">
-              Our Services
+              <span className="cursor"></span>Our Services
             </h2>
           </div>
         </div>
@@ -142,9 +150,14 @@ const OurServices = () => {
                       </>
                     )}
                   </div>
-                  <button className="card-button">
+                  <a
+                    href={service.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="card-button"
+                  >
                     More details
-                  </button>
+                  </a>
                 </div>
               </div>
             </div>

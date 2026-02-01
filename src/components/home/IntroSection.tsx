@@ -57,15 +57,19 @@ export function IntroSection() {
     return (
         <>
             {/* SVG Line Animation Container */}
-            <div className="intro-line-container">
+            <div className="intro-line-container" style={{ overflow: 'visible' }}>
                 <svg
                     id="intro-line-svg"
                     className="intro-line-background"
                     width="700"
                     height="324"
-                    viewBox="0 0 700 324"
+                    viewBox="0 0 700 330"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
+                    style={{
+                        transform: 'translate(0, -100%) scale(1.4)',
+                        transformOrigin: 'bottom left',
+                    }}
                 >
                     <path
                         id="intro-line-path"
