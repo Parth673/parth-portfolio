@@ -13,43 +13,52 @@ interface ProjectData {
     technologies: string[];
     image: string;
     date: string;
+    link: string;
 }
 
 const PROJECTS: ProjectData[] = [
     {
-        title: 'Worldcoin Globe',
-        description: 'In collaboration with Tools for Humanity, we successfully integrated the dynamic Worldcoin 3D globe visualizer onto their website. Our team crafted specialized APIs, empowering the Worldcoin developer team to seamlessly activate visual effects in response to real-time user registration data.',
-        technologies: ['API Design', '3D Design', 'WebGL'],
+        title: 'Hireko.ai',
+        description: 'Building and deploying AI Agents for automated egress calls and SMS/Email orchestration. Designed seamless, end-to-end AI workflows that handle everything from initial candidate screening to final autonomous scoring & outreach.',
+        technologies: ['LangGraph', 'AWS', 'Ollama', 'Livekit'],
         image: '/assets/media/projects/project1.png',
-        date: 'Oct, 23',
+        date: 'June, 2025',
+        link: 'https://hireko.ai',
     },
     {
-        title: 'Ecommerce V2',
-        description: 'Complete overhaul of a high-traffic fashion retail platform. Focused on performance, SEO, and specific micro-interactions to increase conversion rates.',
-        technologies: ['Next.js', 'Shopify API', 'GSAP'],
+        title: 'Open Networks',
+        description: 'Delivered Monsoon 2.0 to one of our Client, an AI-enhanced monitoring tool for switches and routers. I was responsible for the end-to-end real time telemetry data flow storing and processing. I created a Text-to-Viz AI chat, that allows engineers to query live telemetry data via chat, which then automatically generates and displays real-time data visualizations.',
+        technologies: ['Neo4j', 'InfluxDB', 'Prometheus', 'LangGraph', 'Grafana', 'Docker', 'gNMI'],
         image: '/assets/media/projects/project2.png',
-        date: 'Jan, 24',
+        date: 'Nov, 2024',
+        link: 'https://stordis.com/product/monsoon-2-0',
     },
     {
-        title: "Portfolio '25",
-        description: 'My personal playground for WebGL experiments and layout ideas. Winning Awwwards Site of the Day and showcasing advanced shader techniques.',
-        technologies: ['WebGL', 'GLSL', 'Blender'],
+        title: "Solutionist",
+        description: 'Collaborated on a white paper focused on the development of Artificial Pacinian Corpuscle Sensors. I was responsible for the mathematical modeling and practical implementation of XR for Digital Twins',
+        technologies: ['Unity 3D', 'C#', 'Blender', 'MATLAB'],
         image: '/assets/media/projects/project3.png',
         date: 'Mar, 25',
+        link: 'https://youtu.be/0HGZrRCFVSQ?si=iRfLBaPNeD0bX1O3',
     },
 ];
 
 // Placeholder for parallax structure - typical use case involves transparent PNGs
 const PARALLAX_IMAGES: Record<string, { layer1: string; layer2: string; layer3: string }> = {
-    "Worldcoin Globe": {
-        layer1: '/assets/media/projects/project_1_layer1.jpg', // Back
+    "Hireko.ai": {
+        layer1: '/assets/media/projects/project_1_layer1.png', // Back
         layer2: '/assets/media/projects/project_1_layer2.png', // Middle
         layer3: '/assets/media/projects/project_1_layer3.png', // Front
     },
-    "Ecommerce V2": {
+    "Open Networks": {
         layer1: '/assets/media/projects/project_2_layer1.png', // Back
         layer2: '/assets/media/projects/project_2_layer2.png', // Middle
         layer3: '/assets/media/projects/project_2_layer3.png', // Front
+    },
+    "Solutionist": {
+        layer1: '/assets/media/projects/project_3_layer1.png', // Back
+        layer2: '/assets/media/projects/project_3_layer2.png', // Middle
+        layer3: '/assets/media/projects/project_3_layer3.png', // Front
     }
 };
 
@@ -57,6 +66,13 @@ export function ProjectsPage() {
     const titleRef = useRef<HTMLHeadingElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const [activeDateInfo, setActiveDateInfo] = useState<{ date: string, side: 'left' | 'right' } | null>(null);
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth <= 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     useEffect(() => {
         // Mouse Move Parallax Logic
@@ -124,7 +140,7 @@ export function ProjectsPage() {
                     trigger: '.timeline-section',
                     start: 'top 40%',
                     end: 'bottom 80%',
-                    scrub: 1,
+                    scrub: 0.1, // Much more responsive
                 }
             });
 
@@ -150,17 +166,23 @@ export function ProjectsPage() {
 
                 ScrollTrigger.create({
                     trigger: row.querySelector('.timeline-milestone'),
-                    start: 'top 45%', // Visual alignment for line tip meeting dot
+                    start: 'top 80%', // Trigger slightly earlier for better flow
                     end: 'bottom top',
                     toggleActions: 'play none none reverse',
                     onEnter: () => {
-                        setActiveDateInfo({ date: PROJECTS[index].date, side: isReversed ? 'left' : 'right' });
+                        setActiveDateInfo({
+                            date: PROJECTS[index].date,
+                            side: isMobile ? 'right' : (isReversed ? 'left' : 'right')
+                        });
                     },
                     onLeaveBack: () => {
                         if (index > 0) {
                             // Restore previous
                             const prevReversed = (index - 1) % 2 !== 0;
-                            setActiveDateInfo({ date: PROJECTS[index - 1].date, side: prevReversed ? 'left' : 'right' });
+                            setActiveDateInfo({
+                                date: PROJECTS[index - 1].date,
+                                side: isMobile ? 'right' : (prevReversed ? 'left' : 'right')
+                            });
                         } else {
                             setActiveDateInfo(null);
                         }
@@ -172,7 +194,7 @@ export function ProjectsPage() {
                 gsap.fromTo(contentCol,
                     {
                         opacity: 0,
-                        x: isReversed ? -50 : 50 // Slide in towards center
+                        x: isMobile ? 30 : (isReversed ? -50 : 50) // Slide in from right on mobile, or towards center on desktop
                     },
                     {
                         opacity: 1,
@@ -183,7 +205,7 @@ export function ProjectsPage() {
                             trigger: row,
                             start: 'top 75%',
                             end: 'top 40%',
-                            scrub: 1
+                            scrub: 0.5 // More responsive animation
                         }
                     }
                 );
@@ -205,7 +227,7 @@ export function ProjectsPage() {
                             trigger: row,
                             start: 'top 75%',
                             end: 'top 40%',
-                            scrub: 1
+                            scrub: 0.5
                         }
                     }
                 );
@@ -257,9 +279,15 @@ export function ProjectsPage() {
                                         <div className="desc-col">
                                             <p className="project-desc">{project.description}</p>
                                             <div className="project-btn-wrapper">
-                                                <button className="project-btn">
-                                                    <span className="dot"></span> LAUNCH PROJECT
-                                                </button>
+                                                <a
+                                                    href={project.link}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="project-btn"
+                                                    style={{ textDecoration: 'none' }}
+                                                >
+                                                    <span className="dot"></span> SHOW PROJECT
+                                                </a>
                                             </div>
                                         </div>
                                         <div className="tech-col">

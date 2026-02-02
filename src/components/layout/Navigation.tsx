@@ -9,8 +9,8 @@ interface MenuItem {
 
 const menuItems: MenuItem[] = [
     { label: 'HOME', path: '/' },
-    { label: 'ABOUT US', path: '#' },
     { label: 'PROJECTS', path: '/projects' },
+    { label: 'ABOUT US', path: '#' },
     { label: 'CONTACT', path: '#' },
 ];
 

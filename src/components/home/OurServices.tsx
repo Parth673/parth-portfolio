@@ -12,7 +12,7 @@ const OurServices = () => {
       ],
       type: 'list',
       background: '#8a53efff',
-      href: '/services/finetuning'
+      href: 'https://huggingface.co/Parth673'
     },
     {
       title: 'CAD',
@@ -21,7 +21,7 @@ const OurServices = () => {
       description: 'Mechanical, Electrical, Product Design, 3D Modeling',
       type: 'video',
       background: '#5394efff',
-      href: '/services/cad'
+      href: 'https://www.linkedin.com/in/parth-kakadia/'
     },
     {
       title: 'Software Dev',
@@ -33,7 +33,7 @@ const OurServices = () => {
       ],
       type: 'list',
       background: '#91ff24ff',
-      href: '/services/software-dev'
+      href: 'https://github.com/Parth673'
     },
     {
       title: 'Animation',
@@ -42,7 +42,7 @@ const OurServices = () => {
       description: 'We specialize in 2D and 3D animation videos that captivate customers.',
       type: 'video',
       background: '#ff5900ff',
-      href: '/services/animation'
+      href: 'https://www.instagram.com/reel/DPqBvAzk_Lj/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=='
     },
     {
       title: 'VAPT (CyberSec)',
@@ -54,7 +54,7 @@ const OurServices = () => {
       ],
       type: 'list',
       background: '#ff1e4bff',
-      href: '/services/vapt'
+      href: 'https://www.linkedin.com/in/parth-kakadia'
     },
     {
       title: 'Tutor',
@@ -63,7 +63,7 @@ const OurServices = () => {
       description: '2+y experience in teaching. Math, CS, Deep Learning',
       type: 'video',
       background: '#ffea00ff',
-      href: '/services/tutor'
+      href: 'https://www.linkedin.com/in/parth-kakadia'
     }
   ];
 

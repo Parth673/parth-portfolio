@@ -90,8 +90,8 @@ section {
 .nav-btn:hover {
   transform: scale(1.08);
   /* Slightly more scale */
-  background: #3b82f6;
-  /* Blue background */
+  background: #161E54;
+  /* Updated brand blue */
   color: #ffffff;
   /* White text */
 }
@@ -118,8 +118,8 @@ section {
 }
 
 .chat-btn:hover {
-  background-color: #2563eb;
-  /* Slightly darker blue for the prominent button */
+  background-color: #161E54;
+  /* Consistent with brand blue */
 }
 
 .chat-btn .dot {
@@ -971,6 +971,7 @@ section {
   color: #555;
   line-height: 1.6;
   max-width: 100%;
+  text-align: left;
 }
 
 .tech-col {
@@ -982,8 +983,8 @@ section {
 .tech-label {
   font-size: 0.7rem;
   letter-spacing: 0.1em;
-  color: #3b82f6;
-  /* Blue based on image */
+  color: #161E54;
+  /* Updated to brand blue */
   margin-bottom: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -1008,8 +1009,8 @@ section {
 .project-btn {
   background: #ffffff;
   border: none;
-  color: #3b82f6;
-  /* Blue text */
+  color: #161E54;
+  /* Updated text color */
   padding: 1rem 2rem;
   font-size: 0.85rem;
   letter-spacing: 0.05em;
@@ -1020,21 +1021,21 @@ section {
   gap: 0.8rem;
   font-weight: 700;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.15);
-  /* Light blue shadow */
+  box-shadow: 0 4px 15px rgba(22, 30, 84, 0.15);
+  /* Updated shadow color */
 }
 
 .project-btn:hover {
-  background: #3b82f6;
+  background: #161E54;
   color: #fff;
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 10px 25px rgba(22, 30, 84, 0.3);
 }
 
 .project-btn .dot {
   width: 8px;
   height: 8px;
-  background-color: #3b82f6;
+  background-color: #161E54;
   border-radius: 50%;
   transition: background-color 0.3s ease;
 }
@@ -1348,14 +1349,8 @@ section {
 
 .timeline-content-col .project-desc {
   font-size: 1.1rem;
-  margin-left: auto;
-  /* Push to right */
+  text-align: left;
   margin-bottom: 2rem;
-}
-
-.timeline-row:nth-child(even) .timeline-content-col .project-desc {
-  margin-left: 0;
-  margin-right: auto;
 }
 
 .timeline-content-col .tech-col {
@@ -1543,5 +1538,127 @@ body.video-modal-active .navigation-bar {
 
   .timeline-labels {
     gap: 15px;
+  }
+
+  .projects-main-header {
+    padding: 6rem 1.5rem 2rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+
+  .header-meta {
+    align-items: flex-start;
+    flex-direction: row;
+    gap: 1.5rem;
+  }
+
+  .total-count {
+    font-size: 2rem;
+  }
+
+  .down-arrow {
+    font-size: 1.5rem;
+  }
+
+  .timeline-section {
+    padding: 2rem 1rem;
+    overflow: hidden;
+  }
+
+  .timeline-line,
+  .timeline-line-progress,
+  .timeline-line-container {
+    left: 25px;
+    transform: none;
+  }
+
+  .timeline-head-dot {
+    left: 25px;
+    transform: translate(-50%, -50%);
+  }
+
+  .timeline-row {
+    flex-direction: column !important;
+    gap: 2.5rem;
+    margin-bottom: 5rem;
+    align-items: flex-start;
+    padding-left: 50px;
+    /* Space for the line */
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .timeline-milestone {
+    left: 25px;
+    top: 0;
+    transform: translate(-50%, 0);
+  }
+
+  .timeline-content-col {
+    text-align: left !important;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .timeline-content-col .project-title {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .timeline-content-col .project-desc {
+    font-size: 0.9rem;
+    margin-bottom: 1.2rem;
+    line-height: 1.5;
+  }
+
+  .project-btn {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.75rem;
+  }
+
+  .project-btn .dot {
+    width: 6px;
+    height: 6px;
+  }
+
+  .big-project-title {
+    font-size: clamp(3rem, 12vw, 6rem);
+  }
+
+  .timeline-content-col .tech-col {
+    justify-content: flex-start !important;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+    padding: 0;
+    margin-top: 0.8rem;
+  }
+
+  .tech-stack li {
+    font-size: 0.8rem;
+  }
+
+  .tech-label {
+    font-size: 0.6rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .timeline-content-col .project-btn-wrapper {
+    justify-content: flex-start !important;
+    margin-top: 1.2rem;
+  }
+
+  .timeline-visual-col {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .head-dot-date-label.left,
+  .head-dot-date-label.right {
+    left: 35px !important;
+    right: auto !important;
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
   }
 }

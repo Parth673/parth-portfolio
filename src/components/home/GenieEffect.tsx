@@ -312,10 +312,15 @@ export function GenieEffect() {
                             Specializing in CAD/CAM modeling and 3D animation, I develop accurate designs and
                             simulations that support manufacturing, prototyping, and technical communication.
                         </p>
-                        <button className="explore-work-btn group">
+                        <a
+                            href="/projects"
+                            // target="_blank"
+                            rel="noopener noreferrer"
+                            className="explore-work-btn group inline-flex items-center"
+                        >
                             <span className="btn-dot"></span>
                             <span className="btn-txt">Explore Work</span>
-                        </button>
+                        </a>
                     </div>
                 </div>
                 <div className="genie-container" id="genie-container-box" ref={wrapperRef}>
