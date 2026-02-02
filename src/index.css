@@ -644,10 +644,10 @@ section {
 
 /* ============ FOOTER ============ */
 .footer-section {
-  min-height: 100vh;
-  background-color: #111;
+  min-height: 50vh;
+  background-color: #080808;
   color: #fff;
-  padding: 10vh 5rem 5rem;
+  padding: 4rem 5rem 3rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -668,75 +668,208 @@ section {
 }
 
 .footer-title {
-  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
   font-weight: 700;
-  line-height: 1.1;
-  margin-bottom: 1rem;
-  letter-spacing: -0.02em;
+  line-height: 1;
+  margin-bottom: 2.5rem;
+  letter-spacing: -0.03em;
 }
 
 .footer-cta {
   background-color: #fff;
   color: #000;
   border: none;
-  padding: 1.2rem 2.5rem;
-  border-radius: 3rem;
+  padding: 1.2rem 2.8rem;
+  border-radius: 4rem;
   font-weight: 700;
   font-size: 0.9rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 0.8rem;
-  transition: transform 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .footer-cta:hover {
-  transform: scale(1.05);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  background-color: #f0f0f0;
 }
 
-.footer-links {
+.footer-right {
   display: flex;
-  gap: 5rem;
+  flex-direction: column;
+  gap: 2.5rem;
+  flex: 1;
+  max-width: 700px;
 }
 
-.link-group h3 {
-  font-size: 0.8rem;
+.location-card {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  background: #111;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid #222;
+  display: flex;
+  align-items: center;
+  padding: 2rem;
+}
+
+.location-map {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.location-info {
+  position: relative;
+  z-index: 2;
+}
+
+.location-info h3 {
+  font-size: 1.8rem;
   font-weight: 600;
-  color: #666;
-  margin-bottom: 1.5rem;
-  letter-spacing: 0.1em;
-}
-
-.link-group a,
-.link-group p {
-  display: block;
+  margin-bottom: 0.2rem;
   color: #fff;
-  text-decoration: none;
-  font-size: 1rem;
-  margin-bottom: 0.8rem;
-  font-weight: 500;
-  transition: color 0.3s;
 }
 
-.link-group a:hover {
+.location-info p {
+  font-size: 1rem;
   color: #888;
+  font-weight: 400;
+}
+
+.blinking-dot-container {
+  position: absolute;
+  top: 50%;
+  right: 15%;
+  transform: translate(50%, -50%);
+  z-index: 3;
+}
+
+.blinking-dot {
+  width: 14px;
+  height: 14px;
+  background-color: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 15px #fff, 0 0 30px rgba(255, 255, 255, 0.6);
+  position: relative;
+}
+
+.blinking-dot::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  border-radius: 50%;
+  animation: pulse-dot 2s infinite;
+}
+
+@keyframes pulse-dot {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.8;
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(3.5);
+    opacity: 0;
+  }
+}
+
+.social-links-row {
+  display: flex;
+  gap: 1.2rem;
+}
+
+.social-icon-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #888;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  text-decoration: none;
+}
+
+.social-icon-btn svg {
+  width: 28px;
+  height: 28px;
+  fill: currentColor;
+}
+
+.social-icon-btn.linkedin:hover {
+  color: #0077b5;
+}
+
+.social-icon-btn.github:hover {
+  color: #fff;
+}
+
+.social-icon-btn.hugging-face:hover {
+  color: #ffca28;
+}
+
+.social-icon-btn.youtube:hover {
+  color: #ff0000;
+}
+
+.social-icon-btn.twitter:hover {
+  color: #1da1f2;
+}
+
+.social-icon-btn:hover {
+  transform: translateY(-5px) scale(1.15);
 }
 
 .footer-bottom {
-  margin-top: 10vh;
+  margin-top: 4rem;
   padding-top: 2rem;
-  border-top: 1px solid #333;
+  border-top: 1px solid #1a1a1a;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   font-size: 0.8rem;
-  color: #666;
+  color: #555;
+  letter-spacing: 0.05em;
 }
 
 .footer-logo {
   font-weight: 800;
   font-size: 1.5rem;
   color: #fff;
+  letter-spacing: -0.02em;
+}
+
+@media (max-width: 768px) {
+  .footer-section {
+    padding: 5rem 2rem 2rem;
+  }
+
+  .footer-content {
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  .footer-right {
+    min-width: 100%;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    gap: 2rem;
+    text-align: center;
+  }
 }
 
 /* ============ PROJECTS PAGE ============ */
@@ -830,19 +963,19 @@ section {
 }
 
 .desc-col {
-  flex: 1.2;
+  flex: 2;
 }
 
 .project-desc {
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   color: #555;
   line-height: 1.6;
-  max-width: 90%;
+  max-width: 100%;
 }
 
 .tech-col {
-  flex: 0.8;
-  padding-left: 2rem;
+  flex: 0.6;
+  padding-left: 2.5rem;
   border-left: 1px solid rgba(0, 0, 0, 0.05);
 }
 
@@ -924,7 +1057,7 @@ section {
   width: 100%;
   max-width: none;
   /* Let it grow */
-  aspect-ratio: 16/10;
+  aspect-ratio: 16/9;
   /* Landscape */
   overflow: hidden;
   border-radius: 30px;
@@ -1200,8 +1333,7 @@ section {
 .timeline-content-col {
   flex: 1;
   text-align: right;
-  max-width: 500px;
-  /* Animation states handled by GSAP */
+  max-width: 700px;
 }
 
 .timeline-row:nth-child(even) .timeline-content-col {
@@ -1258,7 +1390,7 @@ section {
 
 .timeline-visual-card {
   width: 100%;
-  aspect-ratio: 16/10;
+  aspect-ratio: 16/9;
   border-radius: 20px;
   overflow: hidden;
   position: relative;

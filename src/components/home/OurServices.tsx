@@ -74,9 +74,10 @@ const OurServices = () => {
       <div className="services-container">
         <div className="services-header">
           <div className="header-content">
-            <div className="kick-bass-square"></div>
+            {/* <div className="kick-bass-square"></div> */}
+            <span className="cursor"></span>
             <h2 className="section-title">
-              <span className="cursor"></span>Our Services
+              Our Services
             </h2>
           </div>
         </div>

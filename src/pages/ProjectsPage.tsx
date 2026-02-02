@@ -10,8 +10,7 @@ gsap.registerPlugin(ScrollTrigger);
 interface ProjectData {
     title: string;
     description: string;
-    services: string[];
-    recognitions: string[];
+    technologies: string[];
     image: string;
     date: string;
 }
@@ -20,24 +19,21 @@ const PROJECTS: ProjectData[] = [
     {
         title: 'Worldcoin Globe',
         description: 'In collaboration with Tools for Humanity, we successfully integrated the dynamic Worldcoin 3D globe visualizer onto their website. Our team crafted specialized APIs, empowering the Worldcoin developer team to seamlessly activate visual effects in response to real-time user registration data.',
-        services: ['API Design', '3D Design', 'WebGL'],
-        recognitions: ['FWA SOTD', 'Awwwards HM'],
+        technologies: ['API Design', '3D Design', 'WebGL'],
         image: '/assets/media/projects/project1.png',
         date: 'Oct, 23',
     },
     {
         title: 'Ecommerce V2',
         description: 'Complete overhaul of a high-traffic fashion retail platform. Focused on performance, SEO, and specific micro-interactions to increase conversion rates.',
-        services: ['Next.js', 'Shopify API', 'GSAP'],
-        recognitions: ['CSS Design Award', 'Best UI'],
+        technologies: ['Next.js', 'Shopify API', 'GSAP'],
         image: '/assets/media/projects/project2.png',
         date: 'Jan, 24',
     },
     {
         title: "Portfolio '25",
         description: 'My personal playground for WebGL experiments and layout ideas. Winning Awwwards Site of the Day and showcasing advanced shader techniques.',
-        services: ['WebGL', 'GLSL', 'Blender'],
-        recognitions: ['Site of the Day', 'Developer Award'],
+        technologies: ['WebGL', 'GLSL', 'Blender'],
         image: '/assets/media/projects/project3.png',
         date: 'Mar, 25',
     },
@@ -46,9 +42,14 @@ const PROJECTS: ProjectData[] = [
 // Placeholder for parallax structure - typical use case involves transparent PNGs
 const PARALLAX_IMAGES: Record<string, { layer1: string; layer2: string; layer3: string }> = {
     "Worldcoin Globe": {
-        layer1: '/assets/media/project_1_layer1.jpg', // Back
-        layer2: '/assets/media/project_1_layer2.png', // Middle
-        layer3: '/assets/media/project_1_layer3.png', // Front
+        layer1: '/assets/media/projects/project_1_layer1.jpg', // Back
+        layer2: '/assets/media/projects/project_1_layer2.png', // Middle
+        layer3: '/assets/media/projects/project_1_layer3.png', // Front
+    },
+    "Ecommerce V2": {
+        layer1: '/assets/media/projects/project_2_layer1.png', // Back
+        layer2: '/assets/media/projects/project_2_layer2.png', // Middle
+        layer3: '/assets/media/projects/project_2_layer3.png', // Front
     }
 };
 
@@ -263,24 +264,13 @@ export function ProjectsPage() {
                                         </div>
                                         <div className="tech-col">
                                             <div className="tech-group">
-                                                <h4 className="tech-label">SERVICES</h4>
+                                                <h4 className="tech-label">TECHNOLOGIES</h4>
                                                 <ul className="tech-stack">
-                                                    {project.services.map((service) => (
-                                                        <li key={service}>{service}</li>
+                                                    {project.technologies.map((tech) => (
+                                                        <li key={tech}>{tech}</li>
                                                     ))}
                                                 </ul>
                                             </div>
-
-                                            {project.recognitions && project.recognitions.length > 0 && (
-                                                <div className="tech-group">
-                                                    <h4 className="tech-label" style={{ color: '#3b82f6' }}>RECOGNITIONS</h4>
-                                                    <ul className="tech-stack">
-                                                        {project.recognitions.map((rec) => (
-                                                            <li key={rec}>{rec}</li>
-                                                        ))}
-                                                    </ul>
-                                                </div>
-                                            )}
                                         </div>
                                     </div>
                                 </div>
