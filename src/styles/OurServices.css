@@ -154,7 +154,13 @@
   overflow: hidden;
 }
 
-.service-card:hover {
+@media (hover: hover) {
+  .service-card:hover {
+    background-color: var(--hover-bg);
+  }
+}
+
+.service-card.active {
   background-color: var(--hover-bg);
 }
 
@@ -187,7 +193,13 @@
   transform: translate(-50%, -40%) rotate(6deg);
 }
 
-.service-card:hover .card-bg-image-container {
+@media (hover: hover) {
+  .service-card:hover .card-bg-image-container {
+    transform: translate(-50%, -40%) scale(0);
+  }
+}
+
+.service-card.active .card-bg-image-container {
   transform: translate(-50%, -40%) scale(0);
 }
 
@@ -248,7 +260,13 @@
   }
 }
 
-.service-card:hover .card-content {
+@media (hover: hover) {
+  .service-card:hover .card-content {
+    height: 100%;
+  }
+}
+
+.service-card.active .card-content {
   height: 100%;
 }
 
@@ -283,19 +301,36 @@
   }
 }
 
-.service-card:hover .card-title {
-  /* group-hover:text-3xl lg:group-hover:text-4xl 2xl:group-hover:text-5xl */
+@media (hover: hover) {
+  .service-card:hover .card-title {
+    font-size: 1.875rem;
+  }
+}
+
+.service-card.active .card-title {
   font-size: 1.875rem;
 }
 
 @media (min-width: 1024px) {
-  .service-card:hover .card-title {
+  @media (hover: hover) {
+    .service-card:hover .card-title {
+      font-size: 2.25rem;
+    }
+  }
+
+  .service-card.active .card-title {
     font-size: 2.25rem;
   }
 }
 
 @media (min-width: 1536px) {
-  .service-card:hover .card-title {
+  @media (hover: hover) {
+    .service-card:hover .card-title {
+      font-size: 3rem;
+    }
+  }
+
+  .service-card.active .card-title {
     font-size: 3rem;
   }
 }
@@ -318,7 +353,13 @@
   }
 }
 
-.service-card:hover .card-icon {
+@media (hover: hover) {
+  .service-card:hover .card-icon {
+    transform: rotate(180deg);
+  }
+}
+
+.service-card.active .card-icon {
   transform: rotate(180deg);
 }
 
@@ -341,7 +382,15 @@
   width: 100%;
 }
 
-.service-card:hover .card-info {
+@media (hover: hover) {
+  .service-card:hover .card-info {
+    transition-delay: 200ms;
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.service-card.active .card-info {
   transition-delay: 200ms;
   opacity: 1;
   transform: translateY(0);

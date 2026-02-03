@@ -1,6 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const OurServices = () => {
+  const [activeCard, setActiveCard] = useState<number | null>(null);
+
+  const toggleCard = (index: number) => {
+    setActiveCard(prev => prev === index ? null : index);
+  };
+
   const services = [
     {
       title: 'Finetuning Models',
@@ -86,8 +92,9 @@ const OurServices = () => {
           {services.map((service, index) => (
             <div
               key={index}
-              className="service-card group"
+              className={`service-card group ${activeCard === index ? 'active' : ''}`}
               style={{ '--hover-bg': service.background } as React.CSSProperties}
+              onClick={() => toggleCard(index)}
             >
               <div className="card-bg-image-container">
                 <img
@@ -156,6 +163,7 @@ const OurServices = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="card-button"
+                    onClick={(e) => e.stopPropagation()}
                   >
                     More details
                   </a>
