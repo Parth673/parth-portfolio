@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import gsap from 'gsap';
 
 interface MenuItem {
@@ -10,12 +10,34 @@ interface MenuItem {
 const menuItems: MenuItem[] = [
     { label: 'HOME', path: '/' },
     { label: 'PROJECTS', path: '/projects' },
-    { label: 'ABOUT US', path: '#' },
-    { label: 'CONTACT', path: '#' },
+    { label: 'SERVICES', path: '/#services' },
+    { label: 'CONTACT', path: '#contact' },
 ];
 
 export function Navigation() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const location = useLocation();
+
+    // Close menu when route changes
+    useEffect(() => {
+        setIsMenuOpen(false);
+        const overlayMenu = document.querySelector('.overlay-menu');
+        if (overlayMenu) {
+            overlayMenu.classList.remove('active');
+            gsap.set(overlayMenu, { opacity: 0, y: -20 });
+        }
+    }, [location.pathname]);
+
+    // Handle ESC key to close menu
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape' && isMenuOpen) {
+                toggleMenu();
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [isMenuOpen]);
 
     const toggleMenu = () => {
         const overlayMenu = document.querySelector('.overlay-menu');
@@ -26,22 +48,22 @@ export function Navigation() {
             gsap.to(overlayMenu, {
                 opacity: 1,
                 y: 0,
-                duration: 0.5,
+                duration: 0.4,
                 ease: 'power3.out',
             });
             gsap.from('.menu-card, .newsletter-card', {
                 y: 15,
                 opacity: 0,
-                stagger: 0.1,
-                duration: 0.4,
+                stagger: 0.08,
+                duration: 0.35,
                 ease: 'power2.out',
-                delay: 0.1,
+                delay: 0.05,
             });
         } else {
             gsap.to(overlayMenu, {
                 opacity: 0,
-                y: -20,
-                duration: 0.3,
+                y: -15,
+                duration: 0.25,
                 ease: 'power2.in',
                 onComplete: () => {
                     overlayMenu.classList.remove('active');
@@ -49,6 +71,61 @@ export function Navigation() {
             });
         }
         setIsMenuOpen(!isMenuOpen);
+    };
+
+    const closeMenu = () => {
+        if (!isMenuOpen) return;
+        const overlayMenu = document.querySelector('.overlay-menu');
+        if (overlayMenu) {
+            gsap.to(overlayMenu, {
+                opacity: 0,
+                y: -15,
+                duration: 0.25,
+                ease: 'power2.in',
+                onComplete: () => {
+                    overlayMenu.classList.remove('active');
+                },
+            });
+        }
+        setIsMenuOpen(false);
+    };
+
+    const handleLetsTalk = () => {
+        closeMenu();
+        const footer = document.querySelector('.footer-section');
+        if (footer) {
+            footer.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
+    const handleHomeClick = (e: React.MouseEvent) => {
+        closeMenu();
+        if (location.pathname === '/') {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    };
+
+    const handleMenuLinkClick = (item: MenuItem, e: React.MouseEvent) => {
+        closeMenu();
+        if (item.path === '/' && location.pathname === '/') {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else if (item.path === '#contact') {
+            e.preventDefault();
+            const footer = document.querySelector('.footer-section');
+            if (footer) {
+                footer.scrollIntoView({ behavior: 'smooth' });
+            }
+        } else if (item.path === '/#services') {
+            if (location.pathname === '/') {
+                e.preventDefault();
+                const services = document.querySelector('.our-services-wrapper') || document.querySelector('#services');
+                if (services) {
+                    services.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        }
     };
 
     const handleMenuLinkHover = (e: React.MouseEvent<HTMLAnchorElement>, entering: boolean) => {
@@ -110,22 +187,56 @@ export function Navigation() {
 
     return (
         <>
+            {/* Backdrop for mobile when menu is open */}
+            {isMenuOpen && (
+                <div
+                    className="menu-backdrop"
+                    onClick={closeMenu}
+                    aria-hidden="true"
+                />
+            )}
+
             {/* Logo */}
             <div className="logo">
-                <Link to="/">PARTH</Link>
+                <Link to="/" onClick={handleHomeClick}>PARTH</Link>
             </div>
 
             {/* Nav Buttons */}
             <div className="nav-right">
-                <button className="nav-btn chat-btn">
-                    <span className="chat-btn-text">LET'S TALK</span> <span className="dot"></span>
+                {/* Desktop Buttons */}
+                <button
+                    className="nav-btn chat-btn desktop-only"
+                    onClick={handleLetsTalk}
+                    type="button"
+                >
+                    <span className="chat-btn-text">LET'S TALK</span>
+                    <span className="dot"></span>
                 </button>
-                <button className="nav-btn menu-btn" onClick={toggleMenu}>
+                <button
+                    className="nav-btn menu-btn desktop-only"
+                    onClick={toggleMenu}
+                    type="button"
+                >
                     {isMenuOpen ? 'CLOSE :' : 'MENU ••'}
+                </button>
+
+                {/* Mobile Hamburger Button */}
+                <button
+                    className={`nav-btn hamburger-btn mobile-only ${isMenuOpen ? 'is-active' : ''}`}
+                    onClick={toggleMenu}
+                    type="button"
+                    aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+                    aria-expanded={isMenuOpen}
+                >
+                    <span className="hamburger-box">
+                        <span className="hamburger-line line-top"></span>
+                        <span className="hamburger-line line-mid"></span>
+                        <span className="hamburger-line line-bot"></span>
+                    </span>
                 </button>
             </div>
 
-            {/* Overlay Menu - Sidebar Style */}
+            {/* Overlay Menu */}
             <div className="overlay-menu" id="overlay-menu">
                 <div className="menu-card">
                     <ul className="menu-list">
@@ -134,10 +245,7 @@ export function Navigation() {
                                 <Link
                                     to={item.path}
                                     className="menu-link"
-                                    onClick={() => {
-                                        setIsMenuOpen(false);
-                                        document.querySelector('.overlay-menu')?.classList.remove('active');
-                                    }}
+                                    onClick={(e) => handleMenuLinkClick(item, e)}
                                     onMouseEnter={(e) => handleMenuLinkHover(e, true)}
                                     onMouseLeave={(e) => handleMenuLinkHover(e, false)}
                                 >
@@ -153,10 +261,10 @@ export function Navigation() {
                 </div>
 
                 <div className="newsletter-card">
-                    <h3>Subscribe to our newsletter</h3>
+                    <h3>Reach out to team</h3>
                     <div className="input-wrapper">
                         <input type="email" placeholder="Your email" />
-                        <button className="submit-btn">→</button>
+                        <button className="submit-btn" aria-label="Subscribe">→</button>
                     </div>
                 </div>
             </div>

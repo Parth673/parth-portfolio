@@ -57,7 +57,7 @@ export function IntroSection() {
     return (
         <>
             {/* SVG Line Animation Container */}
-            <div className="intro-line-container" style={{ overflow: 'visible' }}>
+            <div className="intro-line-container">
                 <svg
                     id="intro-line-svg"
                     className="intro-line-background"

@@ -274,6 +274,7 @@ export function ProjectsPage() {
                             <div key={project.title} className="timeline-row">
                                 {/* Text Content */}
                                 <div className="timeline-content-col">
+                                    <span className="project-mobile-date">{project.date}</span>
                                     <h3 className="project-title">{project.title}</h3>
                                     <div className="project-body-grid">
                                         <div className="desc-col">

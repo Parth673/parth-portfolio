@@ -23,7 +23,7 @@ export function Footer() {
     }, []);
 
     return (
-        <footer className="footer-section">
+        <footer className="footer-section" id="contact">
             <div className="footer-content">
                 <div className="footer-left">
                     <h2 className="footer-title">LET'S CREATE SOMETHING EXTRAORDINARY.</h2>

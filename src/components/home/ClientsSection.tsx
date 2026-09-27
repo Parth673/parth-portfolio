@@ -79,7 +79,7 @@ export function ClientsSection() {
           .clients-title {
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            font-size: 1.5rem;
+            font-size: clamp(1.15rem, 2.5vw, 1.5rem);
             font-weight: 700;
             display: flex;
             align-items: center;
@@ -122,13 +122,22 @@ export function ClientsSection() {
           }
 
           @media (max-width: 768px) {
+            .clients-header {
+              margin-bottom: 2.5rem;
+            }
+            .clients-marquee {
+              gap: 48px;
+            }
             .client-item {
-              width: 150px;
-              height: 50px;
-              gap: 60px;
+              width: 130px;
+              height: 44px;
             }
             .clients-title {
-              font-size: 1.2rem;
+              font-size: clamp(1rem, 3.5vw, 1.25rem);
+            }
+            .clients-cursor {
+              height: 1.2rem;
+              width: 0.5rem;
             }
           }
         `}

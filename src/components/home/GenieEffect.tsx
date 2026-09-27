@@ -221,19 +221,19 @@ export function GenieEffect() {
 
         // Use lazy: false for crucial WebGL updates
         tl.to(".genie-text-content", {
-            y: -300,
+            y: -250,
             opacity: 0,
-            duration: 1,
+            duration: 0.8,
             ease: "power1.in",
             lazy: false
         }, 0);
 
         tl.to(state, {
             progress: 1,
-            duration: 2,
+            duration: 1.6,
             ease: "power2.inOut",
             lazy: false
-        }, 0.5);
+        }, 0.2);
 
 
 
@@ -252,9 +252,9 @@ export function GenieEffect() {
 
         const getTargetRect = () => {
             if (window.innerWidth < 1024) {
-                // Mobile layout - centered box in the lower middle
-                // x=0.1, y=0.35, w=0.8, h=0.5 (centered horizontally, taking 80% width)
-                return [0.1, 0.35, 0.8, 0.5];
+                // Mobile layout - compact initial box centered vertically (h=0.30, y=0.35)
+                // On scroll, it grows BOTH UPWARDS (0.65 -> 1.0) and DOWNWARDS (0.35 -> 0.0)
+                return [0.08, 0.35, 0.84, 0.30];
             } else {
                 // Original layout - small box on the left
                 return [0.04, 0.4, 0.35, 0.5];
@@ -309,7 +309,7 @@ export function GenieEffect() {
             <div id="scroll-section" className="genie-wrapper">
                 <div className="genie-text-overlay">
                     <div className="genie-text-content space-y-8">
-                        <p className="text-xl md:text-2xl text-gray-700 font-medium leading-relaxed">
+                        <p className="genie-desc text-lg sm:text-xl md:text-2xl text-gray-700 font-medium leading-relaxed">
                             Specializing in CAD/CAM modeling and 3D animation, I develop accurate designs and
                             simulations that support manufacturing, prototyping, and technical communication.
                         </p>
@@ -346,6 +346,17 @@ export function GenieEffect() {
                     onClick={handleCloseModal}
                     onMouseMove={handleMouseMove}
                 >
+                    <button
+                        className="video-close-btn"
+                        onClick={handleCloseModal}
+                        aria-label="Close video"
+                        type="button"
+                    >
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                            <path d="M18 6L6 18M6 6l12 12" />
+                        </svg>
+                    </button>
+
                     <video
                         ref={modalVideoRef}
                         src="/assets/media/videos/show_reel.mp4"
