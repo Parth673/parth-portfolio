@@ -1,9 +1,15 @@
 import React, { useRef } from 'react'
 import { useGLTF, useAnimations } from '@react-three/drei'
 
+const MODEL_PATH = '/models/robot.glb'
+const DRACO_PATH = '/draco/'
+
+// Configure local Draco decoder
+useGLTF.setDecoderPath(DRACO_PATH)
+
 export function Model(props) {
     const group = useRef()
-    const { nodes, materials, animations } = useGLTF('/models/robot.glb')
+    const { nodes, materials, animations } = useGLTF(MODEL_PATH, DRACO_PATH)
     const { actions, names } = useAnimations(animations, group)
 
     React.useEffect(() => {
@@ -72,5 +78,5 @@ export function Model(props) {
     )
 }
 
-useGLTF.preload('/models/robot.glb')
+useGLTF.preload(MODEL_PATH, DRACO_PATH)
 

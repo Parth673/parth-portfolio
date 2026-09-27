@@ -60,6 +60,11 @@ section {
 .logo a {
   text-decoration: none;
   color: inherit;
+  transition: color 0.3s ease;
+}
+
+.logo a:hover {
+  color: #f45520;
 }
 
 .nav-right {
@@ -81,7 +86,7 @@ section {
   font-weight: 600;
   font-size: 0.8rem;
   cursor: pointer;
-  transition: transform 0.3s ease, background 0.3s;
+  transition: transform 0.3s ease, background 0.3s, color 0.3s, box-shadow 0.3s;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -89,16 +94,13 @@ section {
 
 .nav-btn:hover {
   transform: scale(1.08);
-  /* Slightly more scale */
-  background: #161E54;
-  /* Updated brand blue */
+  background: #f45520;
   color: #ffffff;
-  /* White text */
+  box-shadow: 0 8px 20px rgba(244, 85, 32, 0.35);
 }
 
 .nav-btn:hover .dot {
   background-color: #ffffff;
-  /* White dot on hover */
 }
 
 .dot {
@@ -113,17 +115,78 @@ section {
 }
 
 .chat-btn {
+  position: relative;
+  overflow: hidden;
   background-color: #1a1a1a;
-  color: white;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.8rem 1.4rem;
+  border-radius: 2rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  transition: all 0.5s ease-in-out;
+  z-index: 1;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.chat-btn:hover {
-  background-color: #161E54;
-  /* Consistent with brand blue */
+.chat-btn .chat-btn-text {
+  position: relative;
+  z-index: 2;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  font-size: 0.8rem;
+  transition: color 0.5s ease-in-out;
 }
 
 .chat-btn .dot {
-  background-color: #fff;
+  width: 7px;
+  height: 7px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  position: relative;
+  z-index: 2;
+  transition: all 0.5s ease-in-out;
+}
+
+.chat-btn::after {
+  content: "";
+  position: absolute;
+  right: 1.4rem;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: all 0.6s ease-in-out;
+  background-color: #f45520;
+  border-radius: 50%;
+  visibility: hidden;
+  height: 8px;
+  width: 8px;
+  z-index: 1;
+}
+
+.chat-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 30px rgba(244, 85, 32, 0.4);
+  color: #ffffff;
+}
+
+.chat-btn:hover .chat-btn-text {
+  color: #ffffff;
+}
+
+.chat-btn:hover .dot {
+  background-color: #ffffff;
+  transform: scale(1.5);
+}
+
+.chat-btn:hover::after {
+  visibility: visible;
+  transform: scale(50) translate(0, -1%);
 }
 
 /* ============ OVERLAY MENU ============ */
@@ -983,8 +1046,7 @@ section {
 .tech-label {
   font-size: 0.7rem;
   letter-spacing: 0.1em;
-  color: #161E54;
-  /* Updated to brand blue */
+  color: #f45520;
   margin-bottom: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -1007,41 +1069,74 @@ section {
 }
 
 .project-btn {
+  position: relative;
+  overflow: hidden;
   background: #ffffff;
   border: none;
-  color: #161E54;
-  /* Updated text color */
+  color: #111;
   padding: 1rem 2rem;
   font-size: 0.85rem;
   letter-spacing: 0.05em;
   border-radius: 40px;
   cursor: pointer;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 0.8rem;
   font-weight: 700;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(22, 30, 84, 0.15);
-  /* Updated shadow color */
+  transition: all 0.5s ease-in-out;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 
-.project-btn:hover {
-  background: #161E54;
-  color: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(22, 30, 84, 0.3);
+.project-btn-text,
+.project-btn span {
+  position: relative;
+  z-index: 2;
+  transition: color 0.5s ease-in-out;
 }
 
 .project-btn .dot {
   width: 8px;
   height: 8px;
-  background-color: #161E54;
+  background-color: #f45520;
   border-radius: 50%;
-  transition: background-color 0.3s ease;
+  position: relative;
+  z-index: 2;
+  transition: all 0.5s ease-in-out;
+}
+
+.project-btn::after {
+  content: "";
+  position: absolute;
+  left: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: all 0.6s ease-in-out;
+  background-color: #f45520;
+  border-radius: 50%;
+  visibility: hidden;
+  height: 8px;
+  width: 8px;
+  z-index: 1;
+}
+
+.project-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(244, 85, 32, 0.35);
+  color: #fff;
+}
+
+.project-btn:hover .project-btn-text {
+  color: #fff;
 }
 
 .project-btn:hover .dot {
   background-color: #ffffff;
+  transform: scale(1.5);
+}
+
+.project-btn:hover::after {
+  visibility: visible;
+  transform: scale(60) translate(0, -1%);
 }
 
 .project-visual-panel {
@@ -1619,6 +1714,12 @@ body.video-modal-active .navigation-bar {
   }
 
   .project-btn .dot {
+    width: 6px;
+    height: 6px;
+  }
+
+  .project-btn::after {
+    left: 1.5rem;
     width: 6px;
     height: 6px;
   }

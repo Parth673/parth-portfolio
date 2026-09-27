@@ -286,7 +286,8 @@ export function ProjectsPage() {
                                                     className="project-btn"
                                                     style={{ textDecoration: 'none' }}
                                                 >
-                                                    <span className="dot"></span> SHOW PROJECT
+                                                    <span className="dot"></span>
+                                                    <span className="project-btn-text">SHOW PROJECT</span>
                                                 </a>
                                             </div>
                                         </div>

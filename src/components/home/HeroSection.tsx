@@ -1,10 +1,14 @@
-import { useEffect, useRef, Suspense } from 'react';
+import { useEffect, useRef, Suspense, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { Environment, Float, PerspectiveCamera, ContactShadows } from '@react-three/drei';
+import { Environment, Float, PerspectiveCamera, ContactShadows, useEnvironment, useProgress } from '@react-three/drei';
 import * as THREE from 'three';
 import gsap from 'gsap';
 // @ts-ignore
 import { Model as RobotModel } from './robot';
+
+// Preload the local HDR environment map for instantaneous rendering
+const ENV_PATH = '/environments/city.hdr';
+useEnvironment.preload({ files: ENV_PATH });
 
 // ADJUSTABLE CONSTANTS
 const ROBOT_CONFIG = {
@@ -16,6 +20,71 @@ const ROBOT_CONFIG = {
 };
 
 const WORDS = ["CREATIVE", "INTELLIGENT", "SECURE"];
+
+function ArmLoader() {
+    const { active, progress } = useProgress();
+    const [visible, setVisible] = useState(true);
+
+    useEffect(() => {
+        if (!active && progress >= 100) {
+            const timer = setTimeout(() => setVisible(false), 500);
+            return () => clearTimeout(timer);
+        } else {
+            setVisible(true);
+        }
+    }, [active, progress]);
+
+    if (!visible) return null;
+
+    return (
+        <div style={{
+            position: 'absolute',
+            inset: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            pointerEvents: 'none',
+            zIndex: 10,
+            opacity: active ? 1 : 0,
+            transition: 'opacity 0.5s ease',
+        }}>
+            <div style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '10px',
+                padding: '8px 18px',
+                background: 'rgba(15, 12, 41, 0.75)',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+                borderRadius: '9999px',
+                border: '1px solid rgba(255, 255, 255, 0.12)',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)'
+            }}>
+                <div style={{
+                    width: '14px',
+                    height: '14px',
+                    border: '2px solid rgba(255, 255, 255, 0.2)',
+                    borderTopColor: '#38bdf8',
+                    borderRadius: '50%',
+                    animation: 'arm-spin 0.8s linear infinite'
+                }} />
+                <span style={{
+                    fontFamily: 'monospace',
+                    fontSize: '11px',
+                    letterSpacing: '0.12em',
+                    color: '#e2e8f0',
+                }}>
+                    INITIALIZING 3D ARM {Math.round(progress)}%
+                </span>
+            </div>
+            <style>{`
+                @keyframes arm-spin {
+                    to { transform: rotate(360deg); }
+                }
+            `}</style>
+        </div>
+    );
+}
 
 function RobotScene() {
     const scrollGroupRef = useRef<THREE.Group>(null);
@@ -71,7 +140,7 @@ function RobotScene() {
                 blur={2.5}
                 far={4.5}
             />
-            <Environment preset="city" />
+            <Environment files={ENV_PATH} />
         </Suspense>
     );
 }
@@ -137,6 +206,8 @@ export function HeroSection() {
                 background: 'radial-gradient(circle at 50% 1%, #948E99 -50%, #0f0c29 50%)',
                 position: 'relative'
             }}>
+                <ArmLoader />
+
                 <div className="marquee-container">
                     <div className="marquee-content">
                         {marqueeWords.map((word, i) => (

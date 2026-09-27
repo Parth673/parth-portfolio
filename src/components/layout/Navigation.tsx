@@ -60,8 +60,8 @@ export function Navigation() {
         if (entering) {
             gsap.to(link, {
                 x: 5,
-                backgroundColor: '#e5e7fd',
-                color: '#000000',
+                backgroundColor: '#f5ccb0',
+                color: '#111',
                 borderRadius: '50px',
                 scale: 1.02,
                 padding: '0.7rem 1.2rem',
@@ -79,7 +79,7 @@ export function Navigation() {
             }
 
             if (arrow) {
-                gsap.to(arrow, { x: 0, opacity: 1, color: '#000000', duration: 0.2 });
+                gsap.to(arrow, { x: 0, opacity: 1, color: '#111', duration: 0.2 });
             }
         } else {
             gsap.to(link, {
@@ -118,7 +118,7 @@ export function Navigation() {
             {/* Nav Buttons */}
             <div className="nav-right">
                 <button className="nav-btn chat-btn">
-                    LET'S TALK <span className="dot"></span>
+                    <span className="chat-btn-text">LET'S TALK</span> <span className="dot"></span>
                 </button>
                 <button className="nav-btn menu-btn" onClick={toggleMenu}>
                     {isMenuOpen ? 'CLOSE :' : 'MENU ••'}
